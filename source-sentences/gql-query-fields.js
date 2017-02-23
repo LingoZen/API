@@ -1,0 +1,31 @@
+import {
+    GraphQLID,
+    GraphQLString,
+    GraphQLList
+} from 'graphql';
+
+import {Type as SourceSentence} from './gql-type';
+import {Service as SourceSentenceService} from './service';
+
+export const queryFields = {
+    sourceSentence: {
+        type: SourceSentence,
+        args: {
+            id: {
+                type: GraphQLID
+            },
+            text: {
+                type: GraphQLString
+            }
+        },
+        resolve(_, args) {
+            return SourceSentenceService.getSourceSentence(args);
+        }
+    },
+    sourceSentences: {
+        type: new GraphQLList(SourceSentence),
+        resolve(_, args) {
+            return SourceSentenceService.getSourceSentences(args);
+        }
+    }
+};
