@@ -27,13 +27,13 @@ function update(args) {
 
 function destroy(id) {
     return new Promise((resolve, reject) => {
-        getSourceSentence({id: id}).then((user) => {
-            if (!user) {
+        getSourceSentence({id: id}).then((sourceSentence) => {
+            if (!sourceSentence) {
                 return reject(Error(`Source sentence with id ${id} not found`));
             }
 
             SourceSentence.destroy({where: {id: id}}).then(() => {
-                return resolve(user);
+                return resolve(sourceSentence);
             });
         }).catch((err) => {
             return reject(err);
@@ -44,6 +44,7 @@ function destroy(id) {
 export const Service = {
     getSourceSentence: getSourceSentence,
     getSourceSentences: getSourceSentences,
+
     create: create,
     update: update,
     destroy: destroy

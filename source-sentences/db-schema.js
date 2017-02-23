@@ -2,9 +2,7 @@ import Sequelize from 'sequelize';
 
 import {dbConnection} from '../db';
 import {User} from '../users/db-schema';
-// import {Translation} from '../translations/db-schema';
-// import {Comment} from '../comments/db-schema';
-// import {Reaction} from '../reactions/db-schema';
+import {Language} from '../languages/db-schema';
 
 export const SourceSentence = dbConnection.define('sourceSentence', {
     text: {
@@ -27,8 +25,11 @@ export const SourceSentence = dbConnection.define('sourceSentence', {
     }
 });
 
-//relationships
+/**
+ * Relationships
+ */
 SourceSentence.belongsTo(User);
-// SourceSentence.hasMany(Translation);
-// SourceSentence.hasMany(Comment);
-// SourceSentence.hasMany(Reaction);
+User.hasMany(SourceSentence);
+
+SourceSentence.belongsTo(Language);
+Language.hasMany(SourceSentence);

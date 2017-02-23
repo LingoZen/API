@@ -1,6 +1,6 @@
 import {
     GraphQLID,
-    GraphQLString,
+    GraphQLNonNull,
     GraphQLList
 } from 'graphql';
 
@@ -12,10 +12,7 @@ export const queryFields = {
         type: SourceSentence,
         args: {
             id: {
-                type: GraphQLID
-            },
-            text: {
-                type: GraphQLString
+                type: new GraphQLNonNull(GraphQLID)
             }
         },
         resolve(_, args) {
