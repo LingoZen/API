@@ -26,7 +26,7 @@ const debugEndpoint = {
 };
 
 const _registry = [normalEndPoint];
-console.log(`Env: process.env.NODE_ENV`);
+
 switch (process.env.NODE_ENV) {
     case 'dev':
         _registry.push(debugEndpoint);

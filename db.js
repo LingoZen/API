@@ -4,8 +4,8 @@ import {config} from './config';
 
 export const dbConnection = new Sequelize(
     config.db.name,
-    config.db.username,
-    config.db.password,
+    process.env.LINGOZEN_CONFIG_DB_USERNAME,
+    process.env.LINGOZEN_CONFIG_DB_PASSWORD,
     {
         host: config.db.host,
         dialect: config.db.dialect

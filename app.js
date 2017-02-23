@@ -5,6 +5,8 @@ import {gqlRegistry} from './gql-registry';
 
 const server = new hapi.Server();
 
+console.info(`Environment: ${process.env.NODE_ENV}`);
+
 // Configure the api server
 server.connection({
     host: config.server.host,

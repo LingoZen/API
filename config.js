@@ -5,8 +5,6 @@ export const config = {
     },
     db: {
         name: 'lingozen',
-        username: 'root',
-        password: 'password',
         host: 'localhost',
         dialect: 'mysql'
     }
