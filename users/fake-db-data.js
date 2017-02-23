@@ -3,11 +3,13 @@ import async from 'async';
 
 import {User} from './db-schema'
 
-export function createFakeData(numberOfUsersToCreate) {
+export function createFakeData(options) {
     return new Promise((resolve, reject) => {
-        return User.sync({force: true}).then(() => {
+        return User.sync({force: false}).then(() => {
+            const numberOfUsersToCreate = options.numberOfUsersToCreate;
+
             return async.times(numberOfUsersToCreate, (n, next) => {
-                let user = {
+                const user = {
                     firstName: Faker.name.firstName(),
                     lastName: Faker.name.lastName(),
                     email: Faker.internet.email(),

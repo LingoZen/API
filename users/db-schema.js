@@ -2,8 +2,6 @@ import Sequelize from 'sequelize';
 
 import {dbConnection} from '../db';
 import {Service as UserService} from './service';
-// import {Comment} from '../comments/db-schema';
-// import {Reaction} from '../reactions/db-schema';
 
 export const User = dbConnection.define('user', {
     firstName: {
@@ -48,6 +46,6 @@ export const User = dbConnection.define('user', {
     }
 });
 
-//relationships
-// User.hasMany(Comment);
-// User.hasMany(Reaction);
+/**
+ * Relationships
+ */

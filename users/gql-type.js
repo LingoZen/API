@@ -1,10 +1,13 @@
 import {
+    GraphQLList,
     GraphQLObjectType,
     GraphQLID,
     GraphQLString
 } from 'graphql';
 
-const fields = {
+import {Type as SourceSentence} from '../source-sentences/gql-type';
+
+const fields = () => ({
     id: {
         type: GraphQLID,
         resolve(user) {
@@ -35,18 +38,16 @@ const fields = {
             return user.username;
         }
     },
-    password: {
-        type: GraphQLString,
+    sourceSentences: {
+        type: new GraphQLList(SourceSentence),
         resolve(user) {
-            return `Cannot fetch user password`;
+            return user.getSourceSentences();
         }
     }
-};
+});
 
 export const Type = new GraphQLObjectType({
     name: 'User',
     description: 'User',
-    fields () {
-        return fields
-    }
+    fields: fields
 });

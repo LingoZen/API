@@ -1,6 +1,6 @@
 import {
     GraphQLID,
-    GraphQLString,
+    GraphQLNonNull,
     GraphQLList
 } from 'graphql';
 
@@ -12,13 +12,7 @@ export const queryFields = {
         type: User,
         args: {
             id: {
-                type: GraphQLID
-            },
-            username: {
-                type: GraphQLString
-            },
-            email: {
-                type: GraphQLString
+                type: new GraphQLNonNull(GraphQLID)
             }
         },
         resolve(_, args) {
