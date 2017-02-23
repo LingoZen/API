@@ -3,30 +3,31 @@ import async from 'async';
 
 import {User} from './db-schema'
 
-export function createFakeDate() {
-    User.sync({force: true}).then(() => {
-        let numberOfUsersToCreate = 50;
-        async.times(numberOfUsersToCreate, (n, next) => {
-            let user = {
-                firstName: Faker.name.firstName(),
-                lastName: Faker.name.lastName(),
-                email: Faker.internet.email(),
-                username: Faker.internet.userName(),
-                password: Faker.internet.password()
-            };
+export function createFakeData(numberOfUsersToCreate) {
+    return new Promise((resolve, reject) => {
+        return User.sync({force: true}).then(() => {
+            return async.times(numberOfUsersToCreate, (n, next) => {
+                let user = {
+                    firstName: Faker.name.firstName(),
+                    lastName: Faker.name.lastName(),
+                    email: Faker.internet.email(),
+                    username: Faker.internet.userName(),
+                    password: Faker.internet.password()
+                };
 
-            User.create(user)
-                .then(() => next())
-                .catch((err) => next(err));
-        }, (err) => {
-            if (err) {
-                return console.error(err);
-            }
+                return User.create(user)
+                    .then(() => next())
+                    .catch((err) => next(err));
+            }, (err) => {
+                if (err) {
+                    return reject(err);
+                }
 
-            return console.info(`Created ${numberOfUsersToCreate} users successfully`);
+                return resolve(numberOfUsersToCreate);
+            });
+        }).catch((err) => {
+            return reject(err);
         });
-    }).catch((err) => {
-        console.error(err);
     });
 }
 

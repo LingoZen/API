@@ -4,7 +4,6 @@ import {dbConnection} from '../db';
 import {Service as UserService} from './service';
 // import {Comment} from '../comments/db-schema';
 // import {Reaction} from '../reactions/db-schema';
-import {createFakeDate} from './fake-db-data';
 
 export const User = dbConnection.define('user', {
     firstName: {
@@ -52,6 +51,3 @@ export const User = dbConnection.define('user', {
 //relationships
 // User.hasMany(Comment);
 // User.hasMany(Reaction);
-
-//create fake data
-createFakeDate();

@@ -1,28 +1,31 @@
-import Faker from 'faker';
-import async from 'async';
+import Faker from "faker";
+import async from "async";
 
-import {SourceSentence} from './db-schema'
+import {SourceSentence} from "./db-schema";
 
-export function createFakeDate() {
-    SourceSentence.sync({force: true}).then(() => {
-        let numberOfSourceSentencesToCreate = 5;
-        async.times(numberOfSourceSentencesToCreate, (n, next) => {
-            let sourceSentence = {
-                text: Faker.lorem.sentence(),
-                userId: Faker.random.number({min: 1, max: 50, precision: 1})
-            };
+export function createFakeData(numberOfUsersInSystem) {
+    return new Promise((resolve, reject) => {
+        return SourceSentence.sync({force: true}).then(() => {
+            const numberOfSourceSentencesToCreate = 5;
 
-            SourceSentence.create(sourceSentence)
-                .then(() => next())
-                .catch((err) => next(err));
-        }, (err) => {
-            if (err) {
-                return console.error(err);
-            }
+            return async.times(numberOfSourceSentencesToCreate, (n, next) => {
+                let sourceSentence = {
+                    text: Faker.lorem.sentence(),
+                    userId: Faker.random.number({min: 1, max: numberOfUsersInSystem, precision: 1})
+                };
 
-            return console.info(`Created ${numberOfSourceSentencesToCreate} source sentences successfully`);
+                return SourceSentence.create(sourceSentence)
+                    .then(() => next())
+                    .catch((err) => next(err));
+            }, (err) => {
+                if (err) {
+                    return reject(err);
+                }
+
+                return resolve(numberOfSourceSentencesToCreate);
+            });
+        }).catch((err) => {
+            return reject(err);
         });
-    }).catch((err) => {
-        console.error(err);
     });
 }

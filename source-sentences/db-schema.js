@@ -5,7 +5,6 @@ import {User} from '../users/db-schema';
 // import {Translation} from '../translations/db-schema';
 // import {Comment} from '../comments/db-schema';
 // import {Reaction} from '../reactions/db-schema';
-import {createFakeDate} from './fake-db-data';
 
 export const SourceSentence = dbConnection.define('sourceSentence', {
     text: {
@@ -33,6 +32,3 @@ SourceSentence.belongsTo(User);
 // SourceSentence.hasMany(Translation);
 // SourceSentence.hasMany(Comment);
 // SourceSentence.hasMany(Reaction);
-
-//create fake data
-createFakeDate();
