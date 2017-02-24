@@ -8,11 +8,11 @@ import {createFakeData as createFakeCommentData} from '../comments/fake-db-data'
 import {createFakeData as createFakeReactionData} from '../reactions/fake-db-data';
 
 const numberOfLanguagesInSystem = 3;
-const numberOfUsersToCreate = 100;
-const numberOfSourceSentencesToCreate = 500;
-const numberOfTranslationsToCreate = 700;
-const numberOfCommentsToCreate = 1000;
-const numberOfReactionsToCreate = 2000;
+const numberOfUsersToCreate = 50;
+const numberOfSourceSentencesToCreate = 100;
+const numberOfTranslationsToCreate = 200;
+const numberOfCommentsToCreate = 300;
+const numberOfReactionsToCreate = 500;
 
 async.series([
     (next) => {
@@ -49,7 +49,6 @@ async.series([
         }).then(() => next()).catch((err) => next(err));
     },
     (next) => {
-        //todo: this is not working for some reason, not sure why
         createFakeReactionData({
             numberOfReactionsToCreate: numberOfReactionsToCreate,
             numberOfUsersInSystem: numberOfUsersToCreate,
@@ -61,8 +60,10 @@ async.series([
     }
 ], (err) => {
     if (err) {
-        return console.error(err);
+        console.error(err);
+        return process.exit();
     }
 
-    return console.log(`Created fake data`);
+    console.log(`Created fake data`);
+    return process.exit();
 });

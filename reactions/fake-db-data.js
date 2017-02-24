@@ -13,13 +13,34 @@ export function createFakeData(options) {
             const numberOfCommentsInSystem = options.numberOfCommentsInSystem;
 
             return async.times(numberOfReactionsToCreate, (n, next) => {
-                const reaction = {
-                    type: (Faker.random.number() % 2) ? 'LIKE' : 'DISLIKE',
+                let reaction = {
+                    type: (parseInt(Math.random() * 100) % 3) ? 'LIKE' : 'DISLIKE',
                     userId: Faker.random.number({min: 1, max: numberOfUsersInSystem, precision: 1}),
-                    sourceSentenceId: Faker.random.number({min: 1, max: numberOfSourceSentencesInSystem, precision: 1}),
-                    translationId: Faker.random.number({min: 1, max: numberOfTranslationsInSystem, precision: 1}),
-                    commentId: Faker.random.number({min: 1, max: numberOfCommentsInSystem, precision: 1})
                 };
+
+                switch (parseInt(Math.random() * 100) % 3) {
+                    case 0:
+                        reaction.sourceSentenceId = Faker.random.number({
+                            min: 1,
+                            max: numberOfSourceSentencesInSystem,
+                            precision: 1
+                        });
+                        break;
+                    case 1:
+                        reaction.translationId = Faker.random.number({
+                            min: 1,
+                            max: numberOfTranslationsInSystem,
+                            precision: 1
+                        });
+                        break;
+                    case 2:
+                        reaction.commentId = Faker.random.number({
+                            min: 1,
+                            max: numberOfCommentsInSystem,
+                            precision: 1
+                        });
+                        break;
+                }
 
                 return Reaction.create(reaction)
                     .then(() => next())

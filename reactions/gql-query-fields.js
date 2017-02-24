@@ -1,7 +1,8 @@
 import {
     GraphQLID,
     GraphQLNonNull,
-    GraphQLList
+    GraphQLList,
+    GraphQLString
 } from 'graphql';
 
 import {Type as Reaction} from './gql-type';
@@ -21,6 +22,11 @@ export const queryFields = {
     },
     reactions: {
         type: new GraphQLList(Reaction),
+        args: {
+            type: {
+                type: GraphQLString
+            }
+        },
         resolve(_, args) {
             return ReactionService.getReactions(args);
         }

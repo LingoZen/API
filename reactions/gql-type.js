@@ -19,7 +19,7 @@ const fields = () => ({
     type: {
         type: GraphQLString,
         resolve(reaction) {
-            return reaction.text;
+            return reaction.type;
         }
     },
     userId: {
