@@ -23,7 +23,7 @@ async.series([
                 indexExists[language] = _indexExists;
 
                 return nextLanguage();
-            }).catch((err) => next(err));
+            }).catch((err) => nextLanguage(err));
         }, (err) => {
             if (err) {
                 return next(err);
