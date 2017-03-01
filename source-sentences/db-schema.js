@@ -1,6 +1,7 @@
 import Sequelize from 'sequelize';
 
 import {dbConnection} from '../db';
+import {Service as SourceSentenceService} from './service';
 import {User} from '../users/db-schema';
 import {Language} from '../languages/db-schema';
 
@@ -13,14 +14,20 @@ export const SourceSentence = dbConnection.define('sourceSentence', {
     timestamps: true,
     paranoid: true,
     hooks: {
-        afterCreate: () => {
-            //todo es river here
+        afterCreate: (sourceSentence, options, next) => {
+            SourceSentenceService.indexSourceSentenceInElasticsearch(sourceSentence)
+                .then(() => next())
+                .catch((err) => next(err));
         },
-        afterUpdate: () => {
-            //todo es river here
+        afterUpdate: (sourceSentence, options, next) => {
+            SourceSentenceService.indexSourceSentenceInElasticsearch(sourceSentence)
+                .then(() => next())
+                .catch((err) => next(err));
         },
-        afterDestroy: () => {
-            //todo es river here
+        afterDestroy: (sourceSentence, options, next) => {
+            SourceSentenceService.indexSourceSentenceInElasticsearch(sourceSentence)
+                .then(() => next())
+                .catch((err) => next(err));
         }
     }
 });
