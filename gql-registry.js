@@ -28,10 +28,10 @@ const debugEndpoint = {
 const _registry = [normalEndPoint];
 
 switch (process.env.NODE_ENV) {
-    case 'dev':
+    case 'development':
         _registry.push(debugEndpoint);
         break;
-    case 'prod':
+    case 'production':
         break;
     default:
         break;
