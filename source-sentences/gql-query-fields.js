@@ -1,7 +1,8 @@
 import {
     GraphQLID,
     GraphQLNonNull,
-    GraphQLList
+    GraphQLList,
+    GraphQLString
 } from 'graphql';
 
 import {Type as SourceSentence} from './gql-type';
@@ -23,6 +24,17 @@ export const queryFields = {
         type: new GraphQLList(SourceSentence),
         resolve(_, args) {
             return SourceSentenceService.getSourceSentences(args);
+        }
+    },
+    searchSourceSentences: {
+        type: new GraphQLList(SourceSentence),
+        args: {
+            searchQuery: {
+                type: GraphQLString
+            }
+        },
+        resolve(_, args) {
+            return SourceSentenceService.searchSourceSentences(args);
         }
     }
 };

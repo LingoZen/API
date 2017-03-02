@@ -8,6 +8,7 @@ export const dbConnection = new Sequelize(
     process.env.LINGOZEN_CONFIG_DB_PASSWORD,
     {
         host: config.db.host,
-        dialect: config.db.dialect
+        dialect: config.db.dialect,
+        logging: config.db.logging
     }
 );

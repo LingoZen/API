@@ -20,7 +20,7 @@ export function createFakeData() {
                 }
             ];
 
-            async.each(languages, (language, next) => {
+            return async.each(languages, (language, next) => {
                 return Language.create(language)
                     .then(() => next())
                     .catch((err) => next(err));

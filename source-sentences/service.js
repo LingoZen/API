@@ -46,6 +46,63 @@ function destroy(id) {
     });
 }
 
+function searchSourceSentences(args) {
+    return new Promise((resolve, reject) => {
+        const searchQuery = args && args.searchQuery;
+
+        return getSourceSentences().then((sentences) => resolve(sentences)).catch((err) => reject(err));
+    });
+}
+
+function destroySourceSentenceInElasticsearch(sourceSentence) {
+    return new Promise((resolve, reject) => {
+        let language = null;
+        let index = null;
+
+        return async.series([
+            (next) => {
+                return LanguageService.getLanguage({id: sourceSentence.languageId}).then((_language) => {
+                    if (!_language) {
+                        return next(new Error(`Could not find language with id ${sourceSentence.languageId}`));
+                    }
+
+                    language = _language;
+                    index = `${config.es.sourceSentenceIndexPrefix}${language.englishName}`;
+                    return next();
+                }).catch((err) => {
+                    return next(err);
+                })
+            },
+            (next) => {
+                return esConnection.indices.exists({
+                    index: index
+                }).then((indexExists) => {
+                    if (indexExists) {
+                        return next();
+                    }
+
+                    return next(new Error(`Index ${index} does not exist`));
+                }).catch((err) => {
+                    return next(err);
+                });
+            },
+            (next) => {
+                return esConnection.delete({
+                    index: index,
+                    type: config.es.sourceSentenceType,
+                    id: sourceSentence.id
+                }).then(() => next()).catch((err) => next(err));
+            }
+        ], (err) => {
+            if (err) {
+                return reject(err);
+            }
+
+            return resolve();
+        });
+    });
+}
+
 function indexSourceSentenceInElasticsearch(sourceSentence) {
     return new Promise((resolve, reject) => {
         let language = null;
@@ -100,6 +157,9 @@ function indexSourceSentenceInElasticsearch(sourceSentence) {
 
 export const Service = {
     indexSourceSentenceInElasticsearch: indexSourceSentenceInElasticsearch,
+    destroySourceSentenceInElasticsearch: destroySourceSentenceInElasticsearch,
+
+    searchSourceSentences: searchSourceSentences,
 
     getSourceSentence: getSourceSentence,
     getSourceSentences: getSourceSentences,

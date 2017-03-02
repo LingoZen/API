@@ -6,12 +6,13 @@ export const config = {
     db: {
         name: `lingozen`,
         host: `localhost`,
-        dialect: `mysql`
+        dialect: `mysql`,
+        logging: false
     },
     es: {
         host: `localhost:9200`,
         index: `lingozen`,
-        log: `trace`,
+        log: null,
         sourceSentenceIndexPrefix: `source-sentences-`,
         sourceSentenceType: `source-sentence`
     },

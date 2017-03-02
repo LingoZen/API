@@ -25,7 +25,7 @@ export const SourceSentence = dbConnection.define('sourceSentence', {
                 .catch((err) => next(err));
         },
         afterDestroy: (sourceSentence, options, next) => {
-            SourceSentenceService.indexSourceSentenceInElasticsearch(sourceSentence)
+            SourceSentenceService.destroySourceSentenceInElasticsearch(sourceSentence)
                 .then(() => next())
                 .catch((err) => next(err));
         }

@@ -17,9 +17,7 @@ export function createFakeData(options) {
                     password: Faker.internet.password()
                 };
 
-                return User.create(user)
-                    .then(() => next())
-                    .catch((err) => next(err));
+                return User.create(user).then(() => next()).catch((err) => next(err));
             }, (err) => {
                 if (err) {
                     return reject(err);

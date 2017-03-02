@@ -34,9 +34,7 @@ export function createFakeData(options) {
                         break;
                 }
 
-                return Comment.create(comment)
-                    .then(() => next())
-                    .catch((err) => next(err));
+                return Comment.create(comment).then(() => next()).catch((err) => next(err));
             }, (err) => {
                 if (err) {
                     return reject(err);
