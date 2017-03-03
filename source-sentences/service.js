@@ -49,8 +49,29 @@ function destroy(id) {
 function searchSourceSentences(args) {
     return new Promise((resolve, reject) => {
         const searchQuery = args && args.searchQuery;
+        const searchBody = {
+            _source: false,
+            query: {
+                match: {
+                    text: searchQuery
+                }
+            }
+        };
 
-        return getSourceSentences().then((sentences) => resolve(sentences)).catch((err) => reject(err));
+        return esConnection.search({
+            index: `source-sentences-*`,
+            body: searchBody
+        }).then((results) => {
+            if (!results || !results.hits) {
+                return reject(new Error(`Did not get results back from elasticsearch`));
+            }
+
+            const sentenceResultIds = results.hits.hits.map((hit) => hit._id);
+
+            return getSourceSentences({id: sentenceResultIds}).then((sourceSentences) => {
+                return resolve(sourceSentences);
+            });
+        }).catch((err) => reject(err));
     });
 }
 
