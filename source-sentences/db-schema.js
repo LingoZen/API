@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 
 const {dbConnection} = require('../db');
-const SourceSentenceService = require('./service').Service;
+const SourceSentenceElasticsearchService = require('./elasticsearch-service').ElasticsearchService;
 const {User} = require('../users/db-schema');
 const {Language} = require('../languages/db-schema');
 
@@ -15,13 +15,13 @@ const SourceSentence = dbConnection.define('sourceSentence', {
     paranoid: true,
     hooks: {
         afterCreate: (sourceSentence) => {
-            return SourceSentenceService.indexSourceSentenceInElasticsearch(sourceSentence)
+            return SourceSentenceElasticsearchService.indexSourceSentenceInElasticsearch(sourceSentence)
         },
         afterUpdate: (sourceSentence) => {
-            return SourceSentenceService.indexSourceSentenceInElasticsearch(sourceSentence)
+            return SourceSentenceElasticsearchService.indexSourceSentenceInElasticsearch(sourceSentence)
         },
         afterDestroy: (sourceSentence) => {
-            return SourceSentenceService.destroySourceSentenceInElasticsearch(sourceSentence)
+            return SourceSentenceElasticsearchService.destroySourceSentenceInElasticsearch(sourceSentence)
         }
     }
 });
