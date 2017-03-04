@@ -1,43 +1,35 @@
-import Faker from "faker";
-import async from "async";
+const Faker = require("faker");
 
-import {SourceSentence} from "./db-schema";
-import {Service as LanguageService} from "../languages/service";
+const {SourceSentence} = require("./db-schema");
+const LanguageService = require("../languages/service").Service;
 const seedSentence = require("./seed-sentences.json");
 
-export function createFakeData(options) {
-    return new Promise((resolve, reject) => {
-        return SourceSentence.sync({force: false}).then(() => {
-            const numberOfUsersInSystem = options.numberOfUsersInSystem;
+module.exports.createFakeData = async function (options) {
+    const numberOfUsersInSystem = options.numberOfUsersInSystem;
+    const languageNames = Object.keys(seedSentence);
 
-            const languageNames = Object.keys(seedSentence);
-            return async.each(languageNames, (languageName, nextLanguage) => {
-                return LanguageService.getLanguage({englishName: languageName}).then((language) => {
-                    if (!seedSentence[languageName] || !seedSentence[languageName].length) {
-                        return nextLanguage(new Error(`Could not get seed sentences for language ${languageName}`));
-                    }
+    await SourceSentence.sync({force: false});
 
-                    const sourceSentences = seedSentence[languageName].filter((sentence) => sentence).map((sentence) => {
-                        return {
-                            text: sentence,
-                            userId: Faker.random.number({min: 1, max: numberOfUsersInSystem, precision: 1}),
-                            languageId: language.id
-                        };
-                    });
+    for (let languageName of languageNames) {
+        if (!seedSentence[languageName] || !seedSentence[languageName].length) {
+            throw new Error(`Could not get seed sentences for language ${languageName}`);
+        }
 
-                    return async.each(sourceSentences, (sourceSentence, nextSentence) => {
-                        return SourceSentence.create(sourceSentence).then(() => nextSentence()).catch((err) => nextSentence(err));
-                    }, (err) => nextLanguage(err));
-                }).catch((err) => nextLanguage(err));
-            }, (err) => {
-                if (err) {
-                    return reject(err);
-                }
+        const language = await LanguageService.getLanguage({englishName: languageName});
+        if (!language) {
+            throw new Error(`Could not get language with english name ${languageName}`);
+        }
 
-                return resolve();
-            });
-        }).catch((err) => {
-            return reject(err);
+        const sourceSentences = seedSentence[languageName].filter((sentence) => sentence).map((sentence) => {
+            return {
+                text: sentence,
+                userId: Faker.random.number({min: 1, max: numberOfUsersInSystem, precision: 1}),
+                languageId: language.id
+            };
         });
-    });
-}
+
+        for (let sourceSentence of sourceSentences) {
+            await SourceSentence.create(sourceSentence);
+        }
+    }
+};

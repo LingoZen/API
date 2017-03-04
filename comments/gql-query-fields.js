@@ -1,13 +1,13 @@
-import {
+const {
     GraphQLID,
     GraphQLNonNull,
     GraphQLList
-} from 'graphql';
+} = require('graphql');
 
-import {Type as Comment} from './gql-type';
-import {Service as CommentService} from './service';
+const Comment = require('./gql-type').Type;
+const CommentService = require('./service').Service;
 
-export const queryFields = {
+module.exports.queryFields = {
     comment: {
         type: Comment,
         args: {

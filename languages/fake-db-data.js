@@ -1,38 +1,28 @@
-import async from "async";
+const {Language} = require("./db-schema");
 
-import {Language} from "./db-schema";
+module.exports.createFakeData = async function () {
+    const languages = [
+        {
+            name: 'english',
+            englishName: 'english'
+        },
+        {
+            name: 'español',
+            englishName: 'spanish'
+        },
+        {
+            name: 'français',
+            englishName: 'french'
+        }
+    ];
 
-export function createFakeData() {
-    return new Promise((resolve, reject) => {
-        return Language.sync({force: false}).then(() => {
-            const languages = [
-                {
-                    name: 'english',
-                    englishName: 'english'
-                },
-                {
-                    name: 'español',
-                    englishName: 'spanish'
-                },
-                {
-                    name: 'français',
-                    englishName: 'french'
-                }
-            ];
+    await Language.sync({force: false});
 
-            return async.each(languages, (language, next) => {
-                return Language.create(language)
-                    .then(() => next())
-                    .catch((err) => next(err));
-            }, (err) => {
-                if (err) {
-                    return reject(err);
-                }
+    for (let language of languages) {
+        await Language.create(language)
+            .then(() => next())
+            .catch((err) => next(err));
+    }
 
-                return resolve(languages.length);
-            });
-        }).catch((err) => {
-            return reject(err);
-        });
-    });
-}
+    return languages.length;
+};

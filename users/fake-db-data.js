@@ -1,33 +1,23 @@
-import Faker from 'faker';
-import async from 'async';
+const Faker = require('faker');
 
-import {User} from './db-schema'
+const {User} = require('./db-schema');
 
-export function createFakeData(options) {
-    return new Promise((resolve, reject) => {
-        return User.sync({force: false}).then(() => {
-            const numberOfUsersToCreate = options.numberOfUsersToCreate;
+module.exports.createFakeData = async function (options) {
+    const numberOfUsersToCreate = options.numberOfUsersToCreate;
 
-            return async.times(numberOfUsersToCreate, (n, next) => {
-                const user = {
-                    firstName: Faker.name.firstName(),
-                    lastName: Faker.name.lastName(),
-                    email: Faker.internet.email(),
-                    username: Faker.internet.userName(),
-                    password: Faker.internet.password()
-                };
+    await User.sync({force: false});
 
-                return User.create(user).then(() => next()).catch((err) => next(err));
-            }, (err) => {
-                if (err) {
-                    return reject(err);
-                }
+    for (let _ = 0; _ < numberOfUsersToCreate; _++) {
+        const user = {
+            firstName: Faker.name.firstName(),
+            lastName: Faker.name.lastName(),
+            email: Faker.internet.email(),
+            username: Faker.internet.userName(),
+            password: Faker.internet.password()
+        };
 
-                return resolve(numberOfUsersToCreate);
-            });
-        }).catch((err) => {
-            return reject(err);
-        });
-    });
-}
+        await User.create(user);
+    }
 
+    return numberOfUsersToCreate;
+};

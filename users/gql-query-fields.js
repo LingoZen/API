@@ -1,13 +1,13 @@
-import {
+const {
     GraphQLID,
     GraphQLNonNull,
     GraphQLList
-} from 'graphql';
+} = require('graphql');
 
-import {Type as User} from './gql-type';
-import {Service as UserService} from './service';
+const User = require('./gql-type').Type;
+const UserService = require('./service').Service;
 
-export const queryFields = {
+module.exports.queryFields = {
     user: {
         type: User,
         args: {

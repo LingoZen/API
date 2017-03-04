@@ -1,47 +1,36 @@
-import {Translation} from './db-schema';
+const {Translation} = require('./db-schema');
 
-function getTranslation(args) {
+async function getTranslation(args) {
     return Translation.findOne({where: args});
 }
 
-function getTranslations(args) {
+async function getTranslations(args) {
     return Translation.findAll({where: args});
 }
 
-function create(args) {
+async function create(args) {
     return Translation.create(args);
 }
 
-function update(args) {
+async function update(args) {
     let id = args.id;
     delete args.id;
 
-    return new Promise((resolve, reject) => {
-        return Translation.update(args, {where: {id: id}, limit: 1}).then(() => {
-            return resolve(getTranslation({id: id}));
-        }).catch((err) => {
-            return reject(err);
-        });
-    });
+    await Translation.update(args, {where: {id: id}, limit: 1});
+    return getTranslation({id: id});
 }
 
-function destroy(id) {
-    return new Promise((resolve, reject) => {
-        getTranslation({id: id}).then((translation) => {
-            if (!translation) {
-                return reject(Error(`Translation with id ${id} not found`));
-            }
+async function destroy(id) {
+    const translation = getTranslation({id: id});
+    if (!translation) {
+        throw new Error(`Translation with id ${id} not found`);
+    }
 
-            Translation.destroy({where: {id: id}}).then(() => {
-                return resolve(translation);
-            });
-        }).catch((err) => {
-            return reject(err);
-        });
-    });
+    await Translation.destroy({where: {id: id}});
+    return translation;
 }
 
-export const Service = {
+module.exports.Service = {
     getTranslation: getTranslation,
     getTranslations: getTranslations,
 

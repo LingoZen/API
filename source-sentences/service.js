@@ -1,182 +1,114 @@
-import async from 'async';
+const LanguageService = require('../languages/service').Service;
+const {config} = require('../config');
+const {esConnection} = require('../es');
+const {SourceSentence} = require('./db-schema');
 
-import {Service as LanguageService} from '../languages/service';
-import {config} from '../config';
-import {esConnection} from '../es';
-import {SourceSentence} from './db-schema';
-
-function getSourceSentence(args) {
+async function getSourceSentence(args) {
     return SourceSentence.findOne({where: args});
 }
 
-function getSourceSentences(args) {
+async function getSourceSentences(args) {
     return SourceSentence.findAll({where: args});
 }
 
-function create(args) {
+async function create(args) {
     return SourceSentence.create(args);
 }
 
-function update(args) {
-    let id = args.id;
+async function update(args) {
+    const id = args.id;
     delete args.id;
 
-    return new Promise((resolve, reject) => {
-        return SourceSentence.update(args, {where: {id: id}, limit: 1}).then(() => {
-            return resolve(getSourceSentence({id: id}));
-        }).catch((err) => {
-            return reject(err);
-        });
+    await SourceSentence.update(args, {where: {id: id}, limit: 1});
+    return getSourceSentence({id: id});
+}
+
+async function destroy(id) {
+    const sourceSentence = await getSourceSentence({id: id});
+    if (!sourceSentence) {
+        throw new Error(`Source sentence with id ${id} not found`);
+    }
+
+    await SourceSentence.destroy({where: {id: id}});
+    return sourceSentence;
+}
+
+async function searchSourceSentences(args) {
+    const searchQuery = args && args.searchQuery;
+    const searchBody = {
+        _source: false,
+        query: {
+            match: {
+                text: searchQuery
+            }
+        }
+    };
+
+    const results = await esConnection.search({
+        index: `source-sentences-*`,
+        body: searchBody
+    });
+
+    if (!results || !results.hits) {
+        throw new Error(`Did not get results back from elasticsearch`);
+    }
+
+    const sentenceResultIds = results.hits.hits.map((hit) => hit._id);
+    return getSourceSentences({id: sentenceResultIds})
+}
+
+async function destroySourceSentenceInElasticsearch(sourceSentence) {
+    const language = await LanguageService.getLanguage({id: sourceSentence.languageId});
+
+    if (!_language) {
+        throw new Error(`Could not find language with id ${sourceSentence.languageId}`);
+    }
+
+    const index = `${config.es.sourceSentenceIndexPrefix}${language.englishName}`;
+
+    const indexExists = await esConnection.indices.exists({
+        index: index
+    });
+
+    if (!indexExists) {
+        throw new Error(`Index ${index} does not exist`);
+    }
+
+    return esConnection.delete({
+        index: index,
+        type: config.es.sourceSentenceType,
+        id: sourceSentence.id
     });
 }
 
-function destroy(id) {
-    return new Promise((resolve, reject) => {
-        getSourceSentence({id: id}).then((sourceSentence) => {
-            if (!sourceSentence) {
-                return reject(Error(`Source sentence with id ${id} not found`));
-            }
+async function indexSourceSentenceInElasticsearch(sourceSentence) {
+    const language = await LanguageService.getLanguage({id: sourceSentence.languageId});
 
-            SourceSentence.destroy({where: {id: id}}).then(() => {
-                return resolve(sourceSentence);
-            });
-        }).catch((err) => {
-            return reject(err);
-        });
+    if (!language) {
+        throw new Error(`Could not find language with id ${sourceSentence.languageId}`);
+    }
+
+    const index = `${config.es.sourceSentenceIndexPrefix}${language.englishName}`;
+
+    const indexExists = await esConnection.indices.exists({
+        index: index
+    });
+
+    if (!indexExists) {
+        throw new Error(`Index ${index} does not exist`);
+    }
+
+    return esConnection.index({
+        index: index,
+        type: config.es.sourceSentenceType,
+        id: sourceSentence.id,
+        body: {
+            text: sourceSentence.text
+        }
     });
 }
 
-function searchSourceSentences(args) {
-    return new Promise((resolve, reject) => {
-        const searchQuery = args && args.searchQuery;
-        const searchBody = {
-            _source: false,
-            query: {
-                match: {
-                    text: searchQuery
-                }
-            }
-        };
-
-        return esConnection.search({
-            index: `source-sentences-*`,
-            body: searchBody
-        }).then((results) => {
-            if (!results || !results.hits) {
-                return reject(new Error(`Did not get results back from elasticsearch`));
-            }
-
-            const sentenceResultIds = results.hits.hits.map((hit) => hit._id);
-
-            return getSourceSentences({id: sentenceResultIds}).then((sourceSentences) => {
-                return resolve(sourceSentences);
-            });
-        }).catch((err) => reject(err));
-    });
-}
-
-function destroySourceSentenceInElasticsearch(sourceSentence) {
-    return new Promise((resolve, reject) => {
-        let language = null;
-        let index = null;
-
-        return async.series([
-            (next) => {
-                return LanguageService.getLanguage({id: sourceSentence.languageId}).then((_language) => {
-                    if (!_language) {
-                        return next(new Error(`Could not find language with id ${sourceSentence.languageId}`));
-                    }
-
-                    language = _language;
-                    index = `${config.es.sourceSentenceIndexPrefix}${language.englishName}`;
-                    return next();
-                }).catch((err) => {
-                    return next(err);
-                })
-            },
-            (next) => {
-                return esConnection.indices.exists({
-                    index: index
-                }).then((indexExists) => {
-                    if (indexExists) {
-                        return next();
-                    }
-
-                    return next(new Error(`Index ${index} does not exist`));
-                }).catch((err) => {
-                    return next(err);
-                });
-            },
-            (next) => {
-                return esConnection.delete({
-                    index: index,
-                    type: config.es.sourceSentenceType,
-                    id: sourceSentence.id
-                }).then(() => next()).catch((err) => next(err));
-            }
-        ], (err) => {
-            if (err) {
-                return reject(err);
-            }
-
-            return resolve();
-        });
-    });
-}
-
-function indexSourceSentenceInElasticsearch(sourceSentence) {
-    return new Promise((resolve, reject) => {
-        let language = null;
-        let index = null;
-
-        return async.series([
-            (next) => {
-                return LanguageService.getLanguage({id: sourceSentence.languageId}).then((_language) => {
-                    if (!_language) {
-                        return next(new Error(`Could not find language with id ${sourceSentence.languageId}`));
-                    }
-
-                    language = _language;
-                    index = `${config.es.sourceSentenceIndexPrefix}${language.englishName}`;
-                    return next();
-                }).catch((err) => {
-                    return next(err);
-                })
-            },
-            (next) => {
-                return esConnection.indices.exists({
-                    index: index
-                }).then((indexExists) => {
-                    if (indexExists) {
-                        return next();
-                    }
-
-                    return next(new Error(`Index ${index} does not exist`));
-                }).catch((err) => {
-                    return next(err);
-                });
-            },
-            (next) => {
-                return esConnection.index({
-                    index: index,
-                    type: config.es.sourceSentenceType,
-                    id: sourceSentence.id,
-                    body: {
-                        text: sourceSentence.text
-                    }
-                }).then(() => next()).catch((err) => next(err));
-            }
-        ], (err) => {
-            if (err) {
-                return reject(err);
-            }
-
-            return resolve();
-        });
-    });
-}
-
-export const Service = {
+module.exports.Service = {
     indexSourceSentenceInElasticsearch: indexSourceSentenceInElasticsearch,
     destroySourceSentenceInElasticsearch: destroySourceSentenceInElasticsearch,
 

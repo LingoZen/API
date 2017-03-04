@@ -1,6 +1,6 @@
-import {apolloHapi, graphiqlHapi} from 'apollo-server';
+const {apolloHapi, graphiqlHapi} = require('apollo-server');
 
-import {rootSchema} from './gql-root-schema';
+const {rootSchema} = require('./gql-root-schema');
 
 const normalEndPoint = {
     register: apolloHapi,
@@ -25,11 +25,10 @@ const debugEndpoint = {
     }
 };
 
-const _registry = [normalEndPoint];
-
+const registry = [normalEndPoint];
 switch (process.env.NODE_ENV) {
     case 'development':
-        _registry.push(debugEndpoint);
+        registry.push(debugEndpoint);
         break;
     case 'production':
         break;
@@ -37,4 +36,4 @@ switch (process.env.NODE_ENV) {
         break;
 }
 
-export const gqlRegistry = _registry;
+module.exports.gqlRegistry = registry;

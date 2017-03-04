@@ -1,47 +1,36 @@
-import {Language} from './db-schema';
+const {Language} = require('./db-schema');
 
-function getLanguage(args) {
+async function getLanguage(args) {
     return Language.findOne({where: args});
 }
 
-function getLanguages(args) {
+async function getLanguages(args) {
     return Language.findAll({where: args});
 }
 
-function create(args) {
+async function create(args) {
     return Language.create(args);
 }
 
-function update(args) {
+async function update(args) {
     let id = args.id;
     delete args.id;
 
-    return new Promise((resolve, reject) => {
-        return Language.update(args, {where: {id: id}, limit: 1}).then(() => {
-            return resolve(getLanguage({id: id}));
-        }).catch((err) => {
-            return reject(err);
-        });
-    });
+    await Language.update(args, {where: {id: id}, limit: 1});
+    return getLanguage({id: id});
 }
 
-function destroy(id) {
-    return new Promise((resolve, reject) => {
-        getLanguage({id: id}).then((language) => {
-            if (!language) {
-                return reject(Error(`Language with id ${id} not found`));
-            }
+async function destroy(id) {
+    const language = await getLanguage({id: id});
+    if (!language) {
+        throw new Error(`Language with id ${id} not found`);
+    }
 
-            Language.destroy({where: {id: id}}).then(() => {
-                return resolve(language);
-            });
-        }).catch((err) => {
-            return reject(err);
-        });
-    });
+    await Language.destroy({where: {id: id}});
+    return language;
 }
 
-export const Service = {
+module.exports.Service = {
     getLanguage: getLanguage,
     getLanguages: getLanguages,
 

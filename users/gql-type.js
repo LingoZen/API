@@ -1,11 +1,10 @@
-import {
-    GraphQLList,
+const {
     GraphQLObjectType,
     GraphQLID,
     GraphQLString
-} from 'graphql';
+} = require('graphql');
 
-import {Type as SourceSentence} from '../source-sentences/gql-type';
+// const SourceSentence = require('../source-sentences/gql-type').Type;
 
 const fields = () => ({
     id: {
@@ -38,15 +37,15 @@ const fields = () => ({
             return user.username;
         }
     },
-    sourceSentences: {
-        type: new GraphQLList(SourceSentence),
-        resolve(user) {
-            return user.getSourceSentences();
-        }
-    }
+    // sourceSentences: {
+    //     type: new GraphQLList(SourceSentence),
+    //     resolve(user) {
+    //         return user.getSourceSentences();
+    //     }
+    // }
 });
 
-export const Type = new GraphQLObjectType({
+module.exports.Type = new GraphQLObjectType({
     name: 'User',
     description: 'User',
     fields: fields

@@ -1,13 +1,13 @@
-import {
+const {
     GraphQLID,
     GraphQLString,
     GraphQLNonNull
-} from 'graphql';
+} = require('graphql');
 
-import {Type as Translation} from './gql-type';
-import {Service as TranslationService} from './service';
+const Translation = require('./gql-type').Type;
+const TranslationService = require('./service').Service;
 
-export const mutationFields = {
+module.exports.mutationFields = {
     createTranslation: {
         type: Translation,
         args: {

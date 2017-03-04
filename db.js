@@ -1,8 +1,8 @@
-import Sequelize from 'sequelize';
+const Sequelize = require('sequelize');
 
-import {config} from './config';
+const {config} = require('./config');
 
-export const dbConnection = new Sequelize(
+module.exports.dbConnection = new Sequelize(
     config.db.name,
     process.env.LINGOZEN_CONFIG_DB_USERNAME,
     process.env.LINGOZEN_CONFIG_DB_PASSWORD,

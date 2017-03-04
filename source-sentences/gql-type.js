@@ -1,15 +1,15 @@
-import {
+const {
     GraphQLObjectType,
     GraphQLList,
     GraphQLID,
     GraphQLString
-} from 'graphql';
+} = require('graphql');
 
-import {Type as User} from '../users/gql-type';
-import {Type as Language} from '../languages/gql-type';
-import {Type as Reaction} from '../reactions/gql-type';
-import {Type as Comment} from '../comments/gql-type';
-import {Type as Translation} from '../translations/gql-type';
+const Reaction = require('../reactions/gql-type').Type;
+const Comment = require('../comments/gql-type').Type;
+const Translation = require('../translations/gql-type').Type;
+// const Language = require('../languages/gql-type').Type;
+// const User = require('../users/gql-type').Type;
 
 const fields = () => ({
     id: {
@@ -30,24 +30,24 @@ const fields = () => ({
             return sourceSentence.userId;
         }
     },
-    user: {
-        type: User,
-        resolve(sourceSentence) {
-            return sourceSentence.getUser();
-        }
-    },
+    // user: {
+    //     type: User,
+    //     resolve(sourceSentence) {
+    //         return sourceSentence.getUser();
+    //     }
+    // },
     languageId: {
         type: GraphQLID,
         resolve(sourceSentence) {
             return sourceSentence.languageId;
         }
     },
-    language: {
-        type: Language,
-        resolve(sourceSentence) {
-            return sourceSentence.getLanguage();
-        }
-    },
+    // language: {
+    //     type: Language,
+    //     resolve(sourceSentence) {
+    //         return sourceSentence.getLanguage();
+    //     }
+    // },
     reactions: {
         type: new GraphQLList(Reaction),
         resolve(sourceSentence) {
@@ -66,10 +66,9 @@ const fields = () => ({
             return sourceSentence.getTranslations();
         }
     }
-
 });
 
-export const Type = new GraphQLObjectType({
+module.exports.Type = new GraphQLObjectType({
     name: 'SourceSentence',
     description: 'Source Sentence',
     fields: fields

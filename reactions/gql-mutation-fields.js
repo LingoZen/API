@@ -1,13 +1,13 @@
-import {
+const {
     GraphQLID,
     GraphQLString,
     GraphQLNonNull
-} from 'graphql';
+} = require('graphql');
 
-import {Type as Reaction} from './gql-type';
-import {Service as ReactionService} from './service';
+const Reaction = require('./gql-type').Type;
+const ReactionService = require('./service').Service;
 
-export const mutationFields = {
+module.exports.mutationFields = {
     createReaction: {
         type: Reaction,
         args: {

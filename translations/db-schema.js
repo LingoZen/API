@@ -1,11 +1,11 @@
-import Sequelize from 'sequelize';
+const Sequelize = require('sequelize');
 
-import {dbConnection} from '../db';
-import {User} from '../users/db-schema';
-import {Language} from '../languages/db-schema';
-import {SourceSentence} from '../source-sentences/db-schema';
+const {dbConnection} = require('../db');
+const {User} = require('../users/db-schema');
+const {Language} = require('../languages/db-schema');
+const {SourceSentence} = require('../source-sentences/db-schema');
 
-export const Translation = dbConnection.define('translation', {
+const Translation = dbConnection.define('translation', {
     text: {
         type: Sequelize.TEXT,
         allowNull: false
@@ -13,17 +13,7 @@ export const Translation = dbConnection.define('translation', {
 }, {
     timestamps: true,
     paranoid: true,
-    hooks: {
-        afterCreate: () => {
-            //todo es river here
-        },
-        afterUpdate: () => {
-            //todo es river here
-        },
-        afterDestroy: () => {
-            //todo es river here
-        }
-    }
+    hooks: {}
 });
 
 /**
@@ -37,3 +27,5 @@ SourceSentence.hasMany(Translation);
 
 Translation.belongsTo(Language);
 Language.hasMany(Translation);
+
+module.exports.Translation = Translation;

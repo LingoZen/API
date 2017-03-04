@@ -1,12 +1,11 @@
-import {
+const {
     GraphQLObjectType,
     GraphQLID,
-    GraphQLString,
-    GraphQLList
-} from 'graphql';
+    GraphQLString
+} = require('graphql');
 
-import {Type as SourceSentence} from '../source-sentences/gql-type';
-import {Type as Translation} from '../translations/gql-type';
+// const SourceSentence = require('../source-sentences/gql-type').Type;
+// const Translation = require('../translations/gql-type').Type;
 
 const fields = () => ({
     id: {
@@ -27,21 +26,21 @@ const fields = () => ({
             return language.englishName;
         }
     },
-    sourceSentences: {
-        type: new GraphQLList(SourceSentence),
-        resolve(language) {
-            return language.getSourceSentences();
-        }
-    },
-    translations: {
-        type: new GraphQLList(Translation),
-        resolve(language) {
-            return language.getTranslations();
-        }
-    }
+    // sourceSentences: {
+    //     type: new GraphQLList(SourceSentence),
+    //     resolve(language) {
+    //         return language.getSourceSentences();
+    //     }
+    // },
+    // translations: {
+    //     type: new GraphQLList(Translation),
+    //     resolve(language) {
+    //         return language.getTranslations();
+    //     }
+    // }
 });
 
-export const Type = new GraphQLObjectType({
+module.exports.Type = new GraphQLObjectType({
     name: 'Language',
     description: 'Language',
     fields: fields

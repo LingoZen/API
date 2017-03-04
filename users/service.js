@@ -1,6 +1,6 @@
-import bcrypt from 'bcrypt-nodejs';
+const bcrypt = require('bcrypt-nodejs');
 
-import {User} from './db-schema';
+const {User} = require('./db-schema');
 
 function encryptPassword(user) {
     if (!user) {
@@ -15,48 +15,37 @@ function encryptPassword(user) {
     return user;
 }
 
-function getUser(args) {
+async function getUser(args) {
     return User.findOne({where: args});
 }
 
-function getUsers(args) {
+async function getUsers(args) {
     return User.findAll({where: args});
 }
 
-function create(args) {
+async function create(args) {
     return User.create(args);
 }
 
-function update(args) {
+async function update(args) {
     let id = args.id;
     delete args.id;
 
-    return new Promise((resolve, reject) => {
-        return User.update(args, {where: {id: id}, limit: 1}).then(() => {
-            return resolve(getUser({id: id}));
-        }).catch((err) => {
-            return reject(err);
-        });
-    });
+    await  User.update(args, {where: {id: id}, limit: 1});
+    return getUser({id: id});
 }
 
-function destroy(id) {
-    return new Promise((resolve, reject) => {
-        getUser({id: id}).then((user) => {
-            if (!user) {
-                return reject(Error(`User with id ${id} not found`));
-            }
+async function destroy(id) {
+    const user = getUser({id: id});
+    if (!user) {
+        throw newError(`User with id ${id} not found`);
+    }
 
-            User.destroy({where: {id: id}}).then(() => {
-                return resolve(user);
-            });
-        }).catch((err) => {
-            return reject(err);
-        });
-    });
+    await User.destroy({where: {id: id}});
+    return user;
 }
 
-export const Service = {
+module.exports.Service = {
     getUser: getUser,
     getUsers: getUsers,
     create: create,

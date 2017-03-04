@@ -1,14 +1,14 @@
-import {
+const {
     GraphQLID,
     GraphQLNonNull,
     GraphQLList,
     GraphQLString
-} from 'graphql';
+} = require('graphql');
 
-import {Type as SourceSentence} from './gql-type';
-import {Service as SourceSentenceService} from './service';
+const SourceSentence = require('./gql-type').Type;
+const SourceSentenceService = require('./service').Service;
 
-export const queryFields = {
+module.exports.queryFields = {
     sourceSentence: {
         type: SourceSentence,
         args: {

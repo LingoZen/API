@@ -1,4 +1,4 @@
-export const mapping = {
+module.exports.mapping = {
     sentence: {
         properties: {
             text: {

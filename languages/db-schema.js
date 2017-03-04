@@ -1,8 +1,8 @@
-import Sequelize from 'sequelize';
+const Sequelize = require('sequelize');
 
-import {dbConnection} from '../db';
+const {dbConnection} = require('../db');
 
-export const Language = dbConnection.define('language', {
+const Language = dbConnection.define('language', {
     name: {
         type: Sequelize.TEXT,
         allowNull: false
@@ -20,3 +20,5 @@ export const Language = dbConnection.define('language', {
 /**
  * Relationships
  */
+
+module.exports.Language = Language;

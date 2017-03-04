@@ -1,47 +1,36 @@
-import {Comment} from './db-schema';
+const {Comment} = require('./db-schema');
 
-function getComment(args) {
+async function getComment(args) {
     return Comment.findOne({where: args});
 }
 
-function getComments(args) {
+async function getComments(args) {
     return Comment.findAll({where: args});
 }
 
-function create(args) {
+async function create(args) {
     return Comment.create(args);
 }
 
-function update(args) {
+async function update(args) {
     let id = args.id;
     delete args.id;
 
-    return new Promise((resolve, reject) => {
-        return Comment.update(args, {where: {id: id}, limit: 1}).then(() => {
-            return resolve(getComment({id: id}));
-        }).catch((err) => {
-            return reject(err);
-        });
-    });
+    await Comment.update(args, {where: {id: id}, limit: 1});
+    return getComment({id: id});
 }
 
-function destroy(id) {
-    return new Promise((resolve, reject) => {
-        getComment({id: id}).then((comment) => {
-            if (!comment) {
-                return reject(Error(`Comment with id ${id} not found`));
-            }
+async function destroy(id) {
+    const comment = getComment({id: id});
+    if (!comment) {
+        throw new Error(`Comment with id ${id} not found`);
+    }
 
-            Comment.destroy({where: {id: id}}).then(() => {
-                return resolve(comment);
-            });
-        }).catch((err) => {
-            return reject(err);
-        });
-    });
+    await Comment.destroy({where: {id: id}});
+    return comment
 }
 
-export const Service = {
+module.exports.Service = {
     getComment: getComment,
     getComments: getComments,
 

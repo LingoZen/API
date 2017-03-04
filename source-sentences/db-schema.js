@@ -1,11 +1,11 @@
-import Sequelize from 'sequelize';
+const Sequelize = require('sequelize');
 
-import {dbConnection} from '../db';
-import {Service as SourceSentenceService} from './service';
-import {User} from '../users/db-schema';
-import {Language} from '../languages/db-schema';
+const {dbConnection} = require('../db');
+const SourceSentenceService = require('./service').Service;
+const {User} = require('../users/db-schema');
+const {Language} = require('../languages/db-schema');
 
-export const SourceSentence = dbConnection.define('sourceSentence', {
+const SourceSentence = dbConnection.define('sourceSentence', {
     text: {
         type: Sequelize.TEXT,
         allowNull: false
@@ -14,20 +14,14 @@ export const SourceSentence = dbConnection.define('sourceSentence', {
     timestamps: true,
     paranoid: true,
     hooks: {
-        afterCreate: (sourceSentence, options, next) => {
-            SourceSentenceService.indexSourceSentenceInElasticsearch(sourceSentence)
-                .then(() => next())
-                .catch((err) => next(err));
+        afterCreate: (sourceSentence) => {
+            return SourceSentenceService.indexSourceSentenceInElasticsearch(sourceSentence)
         },
-        afterUpdate: (sourceSentence, options, next) => {
-            SourceSentenceService.indexSourceSentenceInElasticsearch(sourceSentence)
-                .then(() => next())
-                .catch((err) => next(err));
+        afterUpdate: (sourceSentence) => {
+            return SourceSentenceService.indexSourceSentenceInElasticsearch(sourceSentence)
         },
-        afterDestroy: (sourceSentence, options, next) => {
-            SourceSentenceService.destroySourceSentenceInElasticsearch(sourceSentence)
-                .then(() => next())
-                .catch((err) => next(err));
+        afterDestroy: (sourceSentence) => {
+            return SourceSentenceService.destroySourceSentenceInElasticsearch(sourceSentence)
         }
     }
 });
@@ -40,3 +34,5 @@ User.hasMany(SourceSentence);
 
 SourceSentence.belongsTo(Language);
 Language.hasMany(SourceSentence);
+
+module.exports.SourceSentence = SourceSentence;

@@ -1,49 +1,40 @@
-import Faker from "faker";
-import async from "async";
+const Faker = require("faker");
 
-import {Comment} from "./db-schema";
+const {Comment} = require("./db-schema");
 
-export function createFakeData(options) {
-    return new Promise((resolve, reject) => {
-        return Comment.sync({force: false}).then(() => {
-            const numberOfCommentsToCreate = options.numberOfCommentsToCreate;
-            const numberOfTranslationsInSystem = options.numberOfTranslationsInSystem;
-            const numberOfUsersInSystem = options.numberOfUsersInSystem;
-            const numberOfSourceSentencesInSystem = options.numberOfSourceSentencesInSystem;
+module.exports.createFakeData = async function (options) {
+    const numberOfCommentsToCreate = options.numberOfCommentsToCreate;
+    const numberOfTranslationsInSystem = options.numberOfTranslationsInSystem;
+    const numberOfUsersInSystem = options.numberOfUsersInSystem;
+    const numberOfSourceSentencesInSystem = options.numberOfSourceSentencesInSystem;
 
-            return async.times(numberOfCommentsToCreate, (n, next) => {
-                let comment = {
-                    text: Faker.lorem.sentence(),
-                    userId: Faker.random.number({min: 1, max: numberOfUsersInSystem, precision: 1})
-                };
+    await Comment.sync({force: false});
 
-                switch (parseInt(Math.random() * 100) % 2) {
-                    case 0:
-                        comment.sourceSentenceId = Faker.random.number({
-                            min: 1,
-                            max: numberOfSourceSentencesInSystem,
-                            precision: 1
-                        });
-                        break;
-                    case 1:
-                        comment.translationId = Faker.random.number({
-                            min: 1,
-                            max: numberOfTranslationsInSystem,
-                            precision: 1
-                        });
-                        break;
-                }
+    for (let _ = 0; _ < numberOfCommentsToCreate; _++) {
+        let comment = {
+            text: Faker.lorem.sentence(),
+            userId: Faker.random.number({min: 1, max: numberOfUsersInSystem, precision: 1})
+        };
 
-                return Comment.create(comment).then(() => next()).catch((err) => next(err));
-            }, (err) => {
-                if (err) {
-                    return reject(err);
-                }
+        switch (parseInt(Math.random() * 100) % 2) {
+            case 0:
+                comment.sourceSentenceId = Faker.random.number({
+                    min: 1,
+                    max: numberOfSourceSentencesInSystem,
+                    precision: 1
+                });
+                break;
+            case 1:
+                comment.translationId = Faker.random.number({
+                    min: 1,
+                    max: numberOfTranslationsInSystem,
+                    precision: 1
+                });
+                break;
+        }
 
-                return resolve(numberOfTranslationsInSystem);
-            });
-        }).catch((err) => {
-            return reject(err);
-        });
-    });
-}
+        await Comment.create(comment);
+    }
+
+    return numberOfCommentsToCreate;
+};

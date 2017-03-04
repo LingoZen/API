@@ -1,12 +1,12 @@
-import Sequelize from 'sequelize';
+const Sequelize = require('sequelize');
 
-import {dbConnection} from '../db';
-import {User} from '../users/db-schema';
-import {Translation} from '../translations/db-schema';
-import {Comment} from '../comments/db-schema';
-import {SourceSentence} from '../source-sentences/db-schema';
+const {dbConnection} = require('../db');
+const {User} = require('../users/db-schema');
+const {Translation} = require('../translations/db-schema');
+const {Comment} = require('../comments/db-schema');
+const {SourceSentence} = require('../source-sentences/db-schema');
 
-export const Reaction = dbConnection.define('reaction', {
+const Reaction = dbConnection.define('reaction', {
     type: {
         type: Sequelize.ENUM('LIKE', 'DISLIKE'),
         allowNull: false
@@ -31,3 +31,5 @@ User.hasMany(Reaction);
 
 Reaction.belongsTo(Comment);
 Comment.hasMany(Reaction);
+
+module.exports.Reaction = Reaction;

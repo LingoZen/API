@@ -1,13 +1,13 @@
-import {
+const {
     GraphQLID,
     GraphQLString,
     GraphQLNonNull
-} from 'graphql';
+} = require('graphql');
 
-import {Type as Comment} from './gql-type';
-import {Service as CommentService} from './service';
+const Comment = require('./gql-type').Type;
+const CommentService = require('./service').Service;
 
-export const mutationFields = {
+module.exports.mutationFields = {
     createComment: {
         type: Comment,
         args: {

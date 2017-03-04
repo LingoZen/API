@@ -1,47 +1,36 @@
-import {Reaction} from './db-schema';
+const {Reaction} = require('./db-schema');
 
-function getReaction(args) {
+async function getReaction(args) {
     return Reaction.findOne({where: args});
 }
 
-function getReactions(args) {
+async function getReactions(args) {
     return Reaction.findAll({where: args});
 }
 
-function create(args) {
+async function create(args) {
     return Reaction.create(args);
 }
 
-function update(args) {
+async function update(args) {
     let id = args.id;
     delete args.id;
 
-    return new Promise((resolve, reject) => {
-        return Reaction.update(args, {where: {id: id}, limit: 1}).then(() => {
-            return resolve(getReaction({id: id}));
-        }).catch((err) => {
-            return reject(err);
-        });
-    });
+    await Reaction.update(args, {where: {id: id}, limit: 1});
+    return getReaction({id: id});
 }
 
-function destroy(id) {
-    return new Promise((resolve, reject) => {
-        getReaction({id: id}).then((reaction) => {
-            if (!reaction) {
-                return reject(Error(`Reaction with id ${id} not found`));
-            }
+async function destroy(id) {
+    let reaction = getReaction({id: id});
+    if (!reaction) {
+        throw new Error(`Reaction with id ${id} not found`);
+    }
 
-            Reaction.destroy({where: {id: id}}).then(() => {
-                return resolve(reaction);
-            });
-        }).catch((err) => {
-            return reject(err);
-        });
-    });
+    await Reaction.destroy({where: {id: id}});
+    return reaction;
 }
 
-export const Service = {
+module.exports.Service = {
     getReaction: getReaction,
     getReactions: getReactions,
 

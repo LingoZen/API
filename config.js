@@ -1,4 +1,4 @@
-export const config = {
+module.exports.config = {
     server: {
         portNumber: 3000,
         host: `localhost`

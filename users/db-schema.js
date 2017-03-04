@@ -1,9 +1,9 @@
-import Sequelize from 'sequelize';
+const Sequelize = require('sequelize');
 
-import {dbConnection} from '../db';
-import {Service as UserService} from './service';
+const {dbConnection} = require('../db');
+const UserService = require('./service').Service;
 
-export const User = dbConnection.define('user', {
+const User = dbConnection.define('user', {
     firstName: {
         type: Sequelize.STRING,
         allowNull: true
@@ -38,10 +38,10 @@ export const User = dbConnection.define('user', {
     paranoid: true,
     hooks: {
         beforeCreate: (user) => {
-            UserService.encryptPassword(user);
+            return UserService.encryptPassword(user);
         },
         beforeUpdate: (user) => {
-            UserService.encryptPassword(user);
+            return UserService.encryptPassword(user);
         }
     }
 });
@@ -49,3 +49,5 @@ export const User = dbConnection.define('user', {
 /**
  * Relationships
  */
+
+module.exports.User = User;

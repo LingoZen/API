@@ -1,39 +1,39 @@
-import {
+const {
     GraphQLSchema,
     GraphQLObjectType
-} from 'graphql';
+} = require('graphql');
 
-import {queryFields as CommentQueryFields} from './comments/gql-query-fields';
-import {mutationFields as CommentMutationFields} from './comments/gql-mutation-fields';
+const CommentQueryFields = require('./comments/gql-query-fields').queryFields;
+const CommentMutationFields = require('./comments/gql-mutation-fields').mutationFields;
 
-import {queryFields as LanguageQueryFields} from './languages/gql-query-fields';
-import {mutationFields as LanguageMutationFields} from './languages/gql-mutation-fields';
+const LanguageQueryFields = require('./languages/gql-query-fields').queryFields;
+const LanguageMutationFields = require('./languages/gql-mutation-fields').mutationFields;
 
-import {queryFields as ReactionQueryFields} from './reactions/gql-query-fields';
-import {mutationFields as ReactionMutationFields} from './reactions/gql-mutation-fields';
+const ReactionQueryFields = require('./reactions/gql-query-fields').queryFields;
+const ReactionMutationFields = require('./reactions/gql-mutation-fields').mutationFields;
 
-import {queryFields as SourceSentenceQueryFields} from './source-sentences/gql-query-fields';
-import {mutationFields as SourceSentenceMutationFields} from './source-sentences/gql-mutation-fields';
+const SourceSentenceQueryFields = require('./source-sentences/gql-query-fields').queryFields;
+const SourceSentenceMutationFields = require('./source-sentences/gql-mutation-fields').mutationFields;
 
-import {queryFields as TranslationQueryFields} from './translations/gql-query-fields';
-import {mutationFields as TranslationMutationFields} from './translations/gql-mutation-fields';
+const TranslationQueryFields = require('./translations/gql-query-fields').queryFields;
+const TranslationMutationFields = require('./translations/gql-mutation-fields').mutationFields;
 
-import {queryFields as UserQueryFields} from './users/gql-query-fields';
-import {mutationFields as UserMutationFields} from './users/gql-mutation-fields';
+const UserQueryFields = require('./users/gql-query-fields').queryFields;
+const UserMutationFields = require('./users/gql-mutation-fields').mutationFields;
 
-export const rootSchema = new GraphQLSchema({
+module.exports.rootSchema = new GraphQLSchema({
     query: new GraphQLObjectType({
         name: `Query`,
         description: `Root Query`,
         fields: () => {
             return Object.assign(
                 {},
-                CommentQueryFields,
                 LanguageQueryFields,
+                UserQueryFields,
+                CommentQueryFields,
                 ReactionQueryFields,
-                SourceSentenceQueryFields,
                 TranslationQueryFields,
-                UserQueryFields
+                SourceSentenceQueryFields
             );
         }
     }),
@@ -43,12 +43,12 @@ export const rootSchema = new GraphQLSchema({
         fields () {
             return Object.assign(
                 {},
-                CommentMutationFields,
                 LanguageMutationFields,
+                UserMutationFields,
+                CommentMutationFields,
                 ReactionMutationFields,
-                SourceSentenceMutationFields,
                 TranslationMutationFields,
-                UserMutationFields
+                SourceSentenceMutationFields
             );
         }
     })

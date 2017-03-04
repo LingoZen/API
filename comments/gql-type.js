@@ -1,14 +1,14 @@
-import {
+const {
     GraphQLObjectType,
     GraphQLID,
     GraphQLString,
     GraphQLList
-} from 'graphql';
+} = require('graphql');
 
-import {Type as User} from '../users/gql-type';
-import {Type as SourceSentence} from '../source-sentences/gql-type';
-import {Type as Translation} from '../translations/gql-type';
-import {Type as Reaction} from '../reactions/gql-type';
+const Reaction = require('../reactions/gql-type').Type;
+// const User = require('../users/gql-type').Type;
+// const SourceSentence = require('../source-sentences/gql-type').Type;
+// const Translation = require('../translations/gql-type').Type;
 
 const fields = () => ({
     id: {
@@ -29,45 +29,45 @@ const fields = () => ({
             return translation.userId;
         }
     },
-    user: {
-        type: User,
-        resolve(translation) {
-            return translation.getUser();
-        }
-    },
+    // user: {
+    //     type: User,
+    //     resolve(translation) {
+    //         return translation.getUser();
+    //     }
+    // },
     sourceSentenceId: {
         type: GraphQLID,
         resolve(translation) {
-            return translation.userId;
+            return translation.sourceSentenceId;
         }
     },
-    sourceSentence: {
-        type: SourceSentence,
-        resolve(translation) {
-            return translation.getUser();
-        }
-    },
+    // sourceSentence: {
+    //     type: SourceSentence,
+    //     resolve(translation) {
+    //         return translation.getSourceSentence();
+    //     }
+    // },
     translationId: {
         type: GraphQLID,
         resolve(translation) {
-            return translation.userId;
+            return translation.translationId;
         }
     },
-    translation: {
-        type: Translation,
-        resolve(translation) {
-            return translation.getUser();
-        }
-    },
+    // translation: {
+    //     type: Translation,
+    //     resolve(translation) {
+    //         return translation.getTranslation();
+    //     }
+    // },
     reactions: {
         type: new GraphQLList(Reaction),
-        resolve(translation) {
-            return translation.getReactions();
+        resolve(reaction) {
+            return reaction.getReactions();
         }
     }
 });
 
-export const Type = new GraphQLObjectType({
+module.exports.Type = new GraphQLObjectType({
     name: 'Comment',
     description: 'Comment',
     fields: fields

@@ -1,11 +1,11 @@
-import Sequelize from 'sequelize';
+const Sequelize = require('sequelize');
 
-import {dbConnection} from '../db';
-import {User} from '../users/db-schema';
-import {SourceSentence} from '../source-sentences/db-schema';
-import {Translation} from '../translations/db-schema';
+const {dbConnection} = require('../db');
+const {User} = require('../users/db-schema');
+const {SourceSentence} = require('../source-sentences/db-schema');
+const {Translation} = require('../translations/db-schema');
 
-export const Comment = dbConnection.define('comment', {
+const Comment = dbConnection.define('comment', {
     text: {
         type: Sequelize.TEXT,
         allowNull: false
@@ -27,3 +27,5 @@ Translation.hasMany(Comment);
 
 Comment.belongsTo(User);
 User.hasMany(Comment);
+
+module.exports.Comment = Comment;

@@ -1,13 +1,13 @@
-import {
+const {
     GraphQLID,
     GraphQLString,
     GraphQLNonNull
-} from 'graphql';
+} = require('graphql');
 
-import {Type as User} from './gql-type';
-import {Service as UserService} from './service';
+const User = require('./gql-type').Type;
+const UserService = require('./service').Service;
 
-export const mutationFields = {
+module.exports.mutationFields = {
     createUser: {
         type: User,
         args: {

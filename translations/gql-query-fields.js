@@ -1,13 +1,13 @@
-import {
+const {
     GraphQLID,
     GraphQLNonNull,
     GraphQLList
-} from 'graphql';
+} = require('graphql');
 
-import {Type as Translation} from './gql-type';
-import {Service as TranslationService} from './service';
+const Translation = require('./gql-type').Type;
+const TranslationService = require('./service').Service;
 
-export const queryFields = {
+module.exports.queryFields = {
     translation: {
         type: Translation,
         args: {
