@@ -2,7 +2,7 @@ const Faker = require("faker");
 
 const {SourceSentence} = require("./db-schema");
 const LanguageService = require("../languages/service").Service;
-const seedSentence = require("./seed-sentences.json");
+const seedSentence = require("./seed-source-sentences.json");
 
 module.exports.createFakeData = async function (options) {
     const numberOfUsersInSystem = options.numberOfUsersInSystem;
