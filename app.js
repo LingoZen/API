@@ -1,6 +1,7 @@
 const hapi = require('hapi');
 
 const {esConnection} = require('./es');
+const {dbConnection} = require('./db');
 const {config} = require('./config');
 const {gqlRegistry} = require('./gql-registry');
 
@@ -24,8 +25,8 @@ async function main() {
     console.info(`Elasticsearch cluster is running`);
 
     //make sure db is up
-    //todo: actually make sure the database is up
-    console.info(`Database is hopefully up...`);
+    await dbConnection.authenticate();
+    console.info(`Database is running`);
 
     //start the api server
     await server.start();
@@ -35,4 +36,7 @@ async function main() {
     console.info(`Environment: ${process.env.NODE_ENV}`);
 }
 
-main().catch((err) => process.exit(err));
+main().catch((err) => {
+    console.error(err);
+    process.exit(-1);
+});
