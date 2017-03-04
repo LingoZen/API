@@ -1,19 +1,5 @@
-const bcrypt = require('bcrypt-nodejs');
-
 const {User} = require('./db-schema');
 
-function encryptPassword(user) {
-    if (!user) {
-        return user;
-    }
-
-    if (!user.password) {
-        return user;
-    }
-
-    user.password = bcrypt.hashSync(user.password);
-    return user;
-}
 
 async function getUser(args) {
     return User.findOne({where: args});
@@ -50,7 +36,5 @@ module.exports.Service = {
     getUsers: getUsers,
     create: create,
     update: update,
-    destroy: destroy,
-
-    encryptPassword: encryptPassword
+    destroy: destroy
 };
