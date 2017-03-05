@@ -1,14 +1,18 @@
 @echo off
 
 SET "mySqlServiceName=MySQL57"
+REM todo: find a way of doing this without having username/password shown here
+SET "mySqlUsername=root"
+SET "mySqlPassword=password"
 
-REM CALL:installGlobalNodePackages
+CALL:installGlobalNodePackages
 CALL:installLocalNodePackages
 CALL:startMySqlServiceIfNotRunning
 CALL:startEsClusterIfNotRunning
 CALL:setupEsClusterIndices
-CALL:dropAllTablesInDatabase
+CALL:dropAllTablesInDatabase lingozen
 CALL:populateDataStores
+CALL:serveKibana
 
 GOTO:EOF
 
@@ -54,7 +58,7 @@ REM Installs all global packages needed by the application
 REM -------------------------------------
 :installGlobalNodePackages
 ECHO Installing all Global Node Packages
-CALL npm install -g @angular/cli typescript pm2
+CALL npm install -g pm2
 ECHO Installed all Global Node Packages
 GOTO:EOF
 
@@ -74,8 +78,17 @@ REM Creates/Updates the elasticsearch indices and mappings
 REM -------------------------------------
 :setupEsClusterIndices
 ECHO Setting up the elasticsearch cluster indices
-CALL node ./scripts/create-es-index.js
+CALL node .\scripts\create-es-index.js
 ECHO Set up the elasticsearch cluster indices
+GOTO:EOF
+
+REM ------------------------------------
+REM Serve kibana
+REM -------------------------------------
+:serveKibana
+ECHO Serving Kibana
+START "Serving kibana" /D "C:\Development\LingoZen\kibana\bin" .\kibana.bat serve
+ECHO Served Kibana
 GOTO:EOF
 
 
@@ -83,7 +96,10 @@ REM ------------------------------------
 REM Drops all tables in database
 REM -------------------------------------
 :dropAllTablesInDatabase
-ECHO Not yet implemented
+ECHO Dropping all tables in %~1 database
+CALL mysql --user="%mySqlUsername%" --password="%mySqlPassword%" --execute="DROP DATABASE %~1;"
+CALL mysql --user="%mySqlUsername%" --password="%mySqlPassword%" --execute="CREATE DATABASE %~1;"
+ECHO Dropped all tables in %~1 database
 GOTO:EOF
 
 
@@ -92,6 +108,6 @@ REM Populates data stores with data
 REM -------------------------------------
 :populateDataStores
 ECHO Populating Data Stores
-CALL node ./scripts/generate-fake-data.js
+CALL node .\scripts\generate-fake-data.js
 ECHO Populated Data Stores
 GOTO:EOF

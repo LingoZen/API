@@ -19,9 +19,7 @@ module.exports.createFakeData = async function () {
     await Language.sync({force: false});
 
     for (let language of languages) {
-        await Language.create(language)
-            .then(() => next())
-            .catch((err) => next(err));
+        await Language.create(language);
     }
 
     return languages.length;

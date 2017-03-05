@@ -22,7 +22,8 @@ module.exports.createFakeData = async function (options) {
 
         const sourceSentences = seedSentence[languageName].filter((sentence) => sentence).map((sentence) => {
             return {
-                text: sentence,
+                id: sentence.id,
+                text: sentence.text,
                 userId: Faker.random.number({min: 1, max: numberOfUsersInSystem, precision: 1}),
                 languageId: language.id
             };

@@ -71,8 +71,13 @@ async function main() {
 
     await deleteExistingIndices(indexExists, indexPrefix);
     await createIndexForLanguage(languages, indexPrefix);
+
+    console.info('Created indices');
 }
 
 main()
     .then(() => process.exit())
-    .catch((err) => process.exit(err));
+    .catch((err) => {
+        console.error(err);
+        process.exit(-1);
+    });
