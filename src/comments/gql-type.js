@@ -6,6 +6,7 @@ import {
 } from 'graphql';
 
 import {Type as Reaction} from '../reactions/gql-type'
+import {Type as Language} from '../languages/gql-type'
 import {Type as User} from '../users/gql-type'
 import {Type as SourceSentence} from '../source-sentences/gql-type'
 import {Type as Translation} from '../translations/gql-type'
@@ -42,6 +43,12 @@ export const Type = new GraphQLObjectType({
             type: Translation,
             resolve(translation) {
                 return translation.getTranslation();
+            }
+        },
+        language: {
+            type: Language,
+            resolve(translation) {
+                return translation.getLanguage();
             }
         },
         reactions: {

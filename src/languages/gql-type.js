@@ -6,6 +6,7 @@ import {
 } from 'graphql';
 
 import {Type as SourceSentence} from '../source-sentences/gql-type'
+import {Type as Comment} from '../comments/gql-type'
 import {Type as Translation} from '../translations/gql-type'
 
 export const Type = new GraphQLObjectType({
@@ -40,6 +41,12 @@ export const Type = new GraphQLObjectType({
             type: new GraphQLList(Translation),
             resolve(language) {
                 return language.getTranslations();
+            }
+        },
+        comments: {
+            type: new GraphQLList(Comment),
+            resolve(language) {
+                return language.getComments();
             }
         }
     })
