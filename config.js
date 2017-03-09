@@ -7,7 +7,7 @@ module.exports.config = {
         name: `lingozen`,
         host: `localhost`,
         dialect: `mysql`,
-        logging: true
+        logging: console.log
     },
     es: {
         host: `localhost:9200`,

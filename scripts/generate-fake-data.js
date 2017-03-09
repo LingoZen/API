@@ -1,10 +1,11 @@
-const createFakeLanguageData = require('../languages/fake-db-data').createFakeData;
-const createFakeUserData = require('../users/fake-db-data').createFakeData;
-const createFakeSourceSentenceData = require('../source-sentences/fake-db-data').createFakeData;
-const createFakeTranslationData = require('../translations/fake-db-data').createFakeData;
-const createFakeCommentData = require('../comments/fake-db-data').createFakeData;
-const createFakeReactionData = require('../reactions/fake-db-data').createFakeData;
+import {createFakeData as createFakeLanguageData} from '../languages/fake-db-data'
+import {createFakeData as createFakeUserData} from '../users/fake-db-data'
+import {createFakeData as createFakeSourceSentenceData} from '../source-sentences/fake-db-data'
+import {createFakeData as createFakeTranslationData} from '../translations/fake-db-data'
+import {createFakeData as createFakeCommentData} from '../comments/fake-db-data'
+import {createFakeData as createFakeReactionData} from '../reactions/fake-db-data'
 
+//Replace this with all seeds
 async function main() {
     const numberOfLanguagesInSystem = 3;
     const numberOfUsersToCreate = 5;
@@ -57,4 +58,3 @@ main()
         console.error(err);
         process.exit(-1);
     });
-

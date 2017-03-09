@@ -1,8 +1,9 @@
 const {esConnection} = require('../es');
 const {config} = require('../config');
-const frenchSourceSentencesMapping = require('../source-sentences/es-mappings/french').mapping;
-const englishSourceSentencesMapping = require('../source-sentences/es-mappings/english').mapping;
-const spanishSourceSentencesMapping = require('../source-sentences/es-mappings/spanish').mapping;
+
+const frenchSourceSentencesMapping = require('../src/source-sentences/es-mappings/french').mapping;
+const englishSourceSentencesMapping = require('../src/source-sentences/es-mappings/english').mapping;
+const spanishSourceSentencesMapping = require('../src/source-sentences/es-mappings/spanish').mapping;
 
 const mappings = {
     french: frenchSourceSentencesMapping,

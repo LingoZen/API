@@ -5,8 +5,10 @@
   "main": "app.js",
   "engine": ">=7.7.1",
   "scripts": {
-    "build": "cmd.exe /c .\\build.bat",
-    "start": "node ./app.js",
+    "build-and-run": "npm run build-api && npm start",
+    "build-api": "./node_modules/.bin/babel  ./src --experimental --source-maps-inline -d ./dist",
+    "setup": "cmd.exe /c .\\setup.bat",
+    "start": "node ./dist/main.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Nickolas Freitas, Brandon Charest",
@@ -21,5 +23,11 @@
     "lodash": "4.17.4",
     "mysql": "2.13.0",
     "sequelize": "3.30.2"
+  },
+  "devDependencies": {
+    "babel-cli": "6.23.0",
+    "babel-polyfill": "6.23.0",
+    "babel-preset-env": "1.2.1",
+    "babel-preset-latest": "6.22.0"
   }
 }
