@@ -1,12 +1,12 @@
-import {apolloHapi, graphiqlHapi} from 'apollo-server';
+import {graphqlHapi, graphiqlHapi} from 'graphql-server-hapi';
 
 import {rootSchema} from './gql-root-schema';
 
 const normalEndPoint = {
-    register: apolloHapi,
+    register: graphqlHapi,
     options: {
         path: '/api/gql',
-        apolloOptions: {
+        graphqlOptions: {
             schema: rootSchema,
         },
         route: {
