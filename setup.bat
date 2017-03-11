@@ -1,20 +1,17 @@
 @echo off
 
 SET "mySqlServiceName=MySQL57"
-REM todo: find a way of doing this without having username/password shown here
-SET "mySqlUsername=root"
-SET "mySqlPassword=password"
 
 CALL:installGlobalNodePackages
 CALL:installLocalNodePackages
+CALL:buildApi
 CALL:startMySqlServiceIfNotRunning
 CALL:startEsClusterIfNotRunning
-REM CALL:setupEsClusterIndices
-REM CALL:dropAllTablesInDatabase lingozen
+CALL:setupEsClusterIndices
+CALL:seedDatabase
 CALL:serveKibana
 
 GOTO:EOF
-
 
 REM ------------------------------------
 REM Checks if the mysql service is running, if it is not then it starts it
@@ -28,7 +25,6 @@ FOR /F "tokens=3 delims=: " %%H in ('sc query %mySqlServiceName% ^| findstr "   
 )
 ECHO MySQL service is running
 GOTO:EOF
-
 
 REM ------------------------------------
 REM Checks if all node in the es cluster are running, if it is not then it starts it
@@ -51,7 +47,6 @@ CALL "C:\Development\LingoZen\Elasticsearch_Node2\bin\elasticsearch-service.bat"
 ECHO ES Cluster is running
 GOTO:EOF
 
-
 REM ------------------------------------
 REM Installs all global packages needed by the application
 REM -------------------------------------
@@ -61,7 +56,6 @@ CALL npm install -g pm2
 ECHO Installed all Global Node Packages
 GOTO:EOF
 
-
 REM ------------------------------------
 REM Installs all local packages needed by the application
 REM -------------------------------------
@@ -70,7 +64,6 @@ ECHO Installing all Local Node Packages
 CALL npm install
 ECHO Installed all Local Node Packages
 GOTO:EOF
-
 
 REM ------------------------------------
 REM Creates/Updates the elasticsearch indices and mappings
@@ -90,13 +83,20 @@ START "Serving kibana" /D "C:\Development\LingoZen\kibana\bin" .\kibana.bat serv
 ECHO Served Kibana
 GOTO:EOF
 
+REM ------------------------------------
+REM Build Api
+REM -------------------------------------
+:buildApi
+ECHO Building Api
+CALL npm run build
+ECHO Built Api
+GOTO:EOF
 
 REM ------------------------------------
-REM Drops all tables in database
+REM Seed the Database
 REM -------------------------------------
-:dropAllTablesInDatabase
-ECHO Dropping all tables in %~1 database
-CALL mysql --user="%mySqlUsername%" --password="%mySqlPassword%" --execute="DROP DATABASE %~1;"
-CALL mysql --user="%mySqlUsername%" --password="%mySqlPassword%" --execute="CREATE DATABASE %~1;"
-ECHO Dropped all tables in %~1 database
+:seedDatabase
+ECHO Seeding database
+CALL node .\scripts\seed-db.js
+ECHO Seeded database
 GOTO:EOF
