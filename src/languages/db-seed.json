@@ -1,0 +1,20 @@
+[
+  {
+    "id": "eng",
+    "name": "english",
+    "englishName": "english",
+    "iso6391": "en"
+  },
+  {
+    "id": "spa",
+    "name": "español",
+    "englishName": "spanish",
+    "iso6391": "es"
+  },
+  {
+    "id": "fra",
+    "name": "français",
+    "englishName": "french",
+    "iso6391": "fr"
+  }
+]
