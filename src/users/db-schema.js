@@ -1,8 +1,8 @@
 import Sequelize from 'sequelize';
-import bcrypt from 'bcrypt-nodejs';
 import assert from 'assert';
 
 import {dbConnection} from '../../db';
+import {Service as UserService} from './service';
 
 export const User = dbConnection.define('user', {
     firstName: {
@@ -41,34 +41,14 @@ export const User = dbConnection.define('user', {
         beforeCreate: (user) => {
             assert(user);
 
-            if (user.password) {
-                user.password = encryptPassword(user.password);
-            }
-
+            user.password = UserService.encryptPassword(user.password);
             return user;
         },
         beforeUpdate: (user) => {
             assert(user);
 
-            if (user.password) {
-                user.password = encryptPassword(user.password);
-            }
-
+            user.password = UserService.encryptPassword(user.password);
             return user;
         }
     }
 });
-
-function encryptPassword(plaintextPassword) {
-    assert(bcrypt);
-
-    if (!plaintextPassword) {
-        return plaintextPassword;
-    }
-
-    return bcrypt.hashSync(plaintextPassword);
-}
-
-/**
- * Relationships
- */

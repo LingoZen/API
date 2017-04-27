@@ -67,5 +67,41 @@ export const mutationFields = {
         resolve(_, {id}) {
             return UserService.destroy(id);
         }
+    },
+    login: {
+        type: User,
+        args: {
+            username: {
+                type: new GraphQLNonNull(GraphQLString)
+            },
+            password: {
+                type: new GraphQLNonNull(GraphQLString)
+            }
+        },
+        resolve(_, {username, password}) {
+            return UserService.login(username, password);
+        }
+    },
+    register: {
+        type: User,
+        args: {
+            email: {
+                type: new GraphQLNonNull(GraphQLString)
+            },
+            password: {
+                type: new GraphQLNonNull(GraphQLString)
+            },
+            firstName: {
+                type: GraphQLString
+            },
+            lastName: {
+                type: GraphQLString
+            },
+            username: {
+                type: new GraphQLNonNull(GraphQLString)
+            }
+        }, resolve(_, args) {
+            return UserService.register(args);
+        }
     }
 };
