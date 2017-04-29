@@ -6,8 +6,10 @@
   "main": "app.js",
   "engine": ">=7.7.1",
   "scripts": {
+    "create-es-index": "node -r babel-register ./scripts/create-es-index.js",
+    "seed-db": "node -r babel-register ./scripts/seed-db.js",
+    "start": "node -r babel-register ./main.js",
     "setup": "cmd.exe /c .\\setup.bat",
-    "start": "./node_modules/.bin/babel-node ./main.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Nickolas Freitas, Brandon Charest",

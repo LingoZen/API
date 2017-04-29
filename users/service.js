@@ -36,7 +36,7 @@ async function update(args) {
 async function destroy(id) {
     assert(id);
 
-    const user = getUser({id: id});
+    const user = await getUser({id: id});
     if (!user) {
         throw new AppError(`User with id ${id} not found`, {code: `USER_NOT_FOUND`});
     }
@@ -49,16 +49,13 @@ async function login(username, password) {
     assert(username);
     assert(password);
 
-    const user = getUser({username: username});
+    const user = await getUser({username: username});
     if (!user) {
         throw new AppError(`User with username ${username} not found`, {code: `USERNAME_NOT_FOUND`});
     }
 
-    // encrypt the password provided by the user
-    const encryptedPassword = await encryptPassword(password);
-
-    // and compare that encrypted password to the encrypted password stored in the database
-    if (user.password !== encryptedPassword) {
+    const isPasswordCorrect = await checkPassword(password, user.password);
+    if (!isPasswordCorrect) {
         throw new AppError(`Password does not match`, {code: `INCORRECT_PASSWORD`});
     }
 }
@@ -103,6 +100,10 @@ async function register(args) {
 async function encryptPassword(plaintextPassword) {
     // use the brcypt.js library to encrypt the password
     return bcrypt.hashSync(plaintextPassword);
+}
+
+async function checkPassword(plaintextPassword, encryptedPassword) {
+    return bcrypt.compareSync(plaintextPassword, encryptedPassword);
 }
 
 //todo: find password policies that are secure and not annoying to users

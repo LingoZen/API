@@ -7,12 +7,12 @@ const sourceSentenceSeed = require('../source-sentences/db-seed.json');
 const translationSeed = require('../translations/db-seed.json');
 const userSeed = require('../users/db-seed.json');
 
-const {User} = require('../dist/users/db-schema');
-const {Language} = require('../dist/languages/db-schema');
-const {SourceSentence} = require('../dist/source-sentences/db-schema');
-const {Translation} = require('../dist/translations/db-schema');
-const {Comment} = require('../dist/comments/db-schema');
-const {Reaction} = require('../dist/reactions/db-schema');
+const {User} = require('../users/db-schema');
+const {Language} = require('../languages/db-schema');
+const {SourceSentence} = require('../source-sentences/db-schema');
+const {Translation} = require('../translations/db-schema');
+const {Comment} = require('../comments/db-schema');
+const {Reaction} = require('../reactions/db-schema');
 
 
 async function main() {
