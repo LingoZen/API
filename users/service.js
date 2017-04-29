@@ -71,14 +71,14 @@ async function register(args) {
 
     // make sure email is unique
     let existingUser = await getUser({email: args.email});
-    if (!existingUser) {
+    if (existingUser) {
         throw new AppError(`Email ${args.email} is already used`, {code: `EMAIL_NOT_UNIQUE`});
     }
 
     // make sure username is unique
     //todo: can we merge this get with above?
     existingUser = await getUser({username: args.username});
-    if (!existingUser) {
+    if (existingUser) {
         throw new AppError(`Username ${args.username} is already used`, {code: `USERNAME_NOT_UNIQUE`});
     }
 
@@ -93,9 +93,6 @@ async function register(args) {
     if (!emailFormatIsGood) {
         throw new AppError(`Email format is bad`, {code: `BAD_EMAIL_FORMAT`});
     }
-
-    //encrypt password
-    args.password = await encryptPassword(args.password);
 
     // at this point, username and email is unique, and password is strong and encrypted.
     // if we wanted to validate any other properties then we would do that here, but we don't have any validation at the moment
