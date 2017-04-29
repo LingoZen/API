@@ -1,6 +1,7 @@
 import assert from 'assert';
 
 import {Reaction} from './db-schema';
+import {AppError} from "../utils/app-error";
 
 async function getReaction(args) {
     assert(args);
@@ -36,7 +37,7 @@ async function destroy(id) {
 
     let reaction = getReaction({id: id});
     if (!reaction) {
-        throw new Error(`Reaction with id ${id} not found`);
+        throw new AppError(`Reaction with id ${id} not found`, {code: `REACTION_NOT_FOUND`});
     }
 
     await Reaction.destroy({where: {id: id}});

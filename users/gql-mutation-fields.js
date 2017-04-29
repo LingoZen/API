@@ -77,10 +77,10 @@ export const mutationFields = {
 
                 switch (e.code) {
                     case 'INCORRECT_PASSWORD':
-                    case 'INCORRECT_USERNAME':
+                    case 'USERNAME_NOT_FOUND':
                         throw new GqlError({data: {code: 'INCORRECT_USERNAME_OR_PASSWORD'}});
                     default:
-                        throw new GqlError({data: {code: 'INCORRECT_USERNAME_OR_PASSWORD'}});
+                        throw new GqlError({data: {code: null}});
                 }
 
             }
@@ -101,8 +101,26 @@ export const mutationFields = {
             username: {
                 type: new GraphQLNonNull(GraphQLString)
             }
-        }, resolve(_, args) {
-            return UserService.register(args);
+        },
+        async resolve(_, args) {
+            try {
+
+                return UserService.register(args);
+            } catch (e) {
+                console.error(e);
+
+                switch (e.code) {
+                    case 'EMAIL_NOT_UNIQUE':
+                    case 'USERNAME_NOT_UNIQUE':
+                    case 'PASSWORD_NOT_SECURE':
+                    case 'BAD_EMAIL_FORMAT':
+                        throw new GqlError({data: {code: error.code}});
+                    default:
+                        throw new GqlError({data: {code: null}});
+                }
+
+            }
         }
     }
 };
+

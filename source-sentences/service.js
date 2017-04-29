@@ -3,6 +3,7 @@ import assert from 'assert';
 import {config} from '../config';
 import {esConnection} from '../es';
 import {SourceSentence} from './db-schema';
+import {AppError} from "../utils/app-error";
 
 async function getSourceSentence(args) {
     assert(args);
@@ -38,7 +39,7 @@ async function destroy(id) {
 
     const sourceSentence = await getSourceSentence({id: id});
     if (!sourceSentence) {
-        throw new Error(`Source sentence with id ${id} not found`);
+        throw new AppError(`Source sentence with id ${id} not found`, {code: `SENTENCE_NOT_FOUND`});
     }
 
     await SourceSentence.destroy({where: {id: id}});
@@ -64,7 +65,7 @@ async function searchSourceSentences(args) {
     });
 
     if (!results || !results.hits) {
-        throw new Error(`Did not get results back from elasticsearch`);
+        throw new AppError(`Did not get results back from elasticsearch`, {code: `NO_RESULTS`});
     }
 
     const sentenceResultIds = results.hits.hits.map((hit) => hit._id);

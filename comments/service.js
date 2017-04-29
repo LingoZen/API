@@ -1,6 +1,7 @@
 import assert from 'assert';
 
 import {Comment} from './db-schema';
+import {AppError} from "../utils/app-error";
 
 async function getComment(args) {
     assert(args);
@@ -36,7 +37,7 @@ async function destroy(id) {
 
     const comment = getComment({id: id});
     if (!comment) {
-        throw new Error(`Comment with id ${id} not found`);
+        throw new AppError(`Comment with id ${id} not found`, {code: `COMMENT_NOT_FOUND`});
     }
 
     await Comment.destroy({where: {id: id}});

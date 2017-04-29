@@ -38,7 +38,7 @@ async function destroy(id) {
 
     const user = getUser({id: id});
     if (!user) {
-        throw new Error(`User with id ${id} not found`);
+        throw new AppError(`User with id ${id} not found`, {code: `USER_NOT_FOUND`});
     }
 
     await User.destroy({where: {id: id}});
@@ -51,7 +51,7 @@ async function login(username, password) {
 
     const user = getUser({username: username});
     if (!user) {
-        throw new AppError(`User with username ${username} not found`, {code: `INCORRECT_PASSWORD`});
+        throw new AppError(`User with username ${username} not found`, {code: `USERNAME_NOT_FOUND`});
     }
 
     // encrypt the password provided by the user
@@ -72,20 +72,26 @@ async function register(args) {
     // make sure email is unique
     let existingUser = await getUser({email: args.email});
     if (!existingUser) {
-        throw new Error(`Email ${args.email} is already used`);
+        throw new AppError(`Email ${args.email} is already used`, {code: `EMAIL_NOT_UNIQUE`});
     }
 
     // make sure username is unique
     //todo: can we merge this get with above?
     existingUser = await getUser({username: args.username});
     if (!existingUser) {
-        throw new Error(`Username ${args.username} is already used`);
+        throw new AppError(`Username ${args.username} is already used`, {code: `USERNAME_NOT_UNIQUE`});
     }
 
     // make sure password is strong enough
     const passwordIsStrong = await isPasswordStrong(args.password);
     if (!passwordIsStrong) {
-        throw new Error(`Password is not strong`);
+        throw new AppError(`Password is not strong`, {code: `PASSWORD_NOT_SECURE`});
+    }
+
+    //validate email format
+    const emailFormatIsGood = await isEmailFormatIsGood(args.email);
+    if (!emailFormatIsGood) {
+        throw new AppError(`Email format is bad`, {code: `BAD_EMAIL_FORMAT`});
     }
 
     //encrypt password
@@ -104,6 +110,11 @@ async function encryptPassword(plaintextPassword) {
 
 //todo: find password policies that are secure and not annoying to users
 async function isPasswordStrong(plaintextPassword) {
+    return true;
+}
+
+//todo: find email regex
+async function isEmailFormatIsGood(email) {
     return true;
 }
 

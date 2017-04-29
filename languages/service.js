@@ -1,6 +1,7 @@
 import assert from 'assert';
 
 import {Language} from './db-schema';
+import {AppError} from "../utils/app-error";
 
 async function getLanguage(args) {
     assert(args);
@@ -36,7 +37,7 @@ async function destroy(id) {
 
     const language = await getLanguage({id: id});
     if (!language) {
-        throw new Error(`Language with id ${id} not found`);
+        throw new AppError(`Language with id ${id} not found`, {code: `LANGUAGE_NOT_FOUND`});
     }
 
     await Language.destroy({where: {id: id}});

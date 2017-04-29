@@ -3,6 +3,7 @@ import assert from 'assert';
 import {Service as LanguageService} from '../languages/service'
 import {config} from '../config';
 import {esConnection} from '../es';
+import {AppError} from "../utils/app-error";
 
 async function destroySourceSentenceInElasticsearch(sourceSentence) {
     assert(sourceSentence);
@@ -10,7 +11,7 @@ async function destroySourceSentenceInElasticsearch(sourceSentence) {
     const language = await LanguageService.getLanguage({id: sourceSentence.languageId});
 
     if (!_language) {
-        throw new Error(`Could not find language with id ${sourceSentence.languageId}`);
+        throw new AppError(`Could not find language with id ${sourceSentence.languageId}`, {code: `LANGUAGE_NOT_FOUND`});
     }
 
     const index = `${config.es.sourceSentenceIndexPrefix}${language.englishName}`;
@@ -20,7 +21,7 @@ async function destroySourceSentenceInElasticsearch(sourceSentence) {
     });
 
     if (!indexExists) {
-        throw new Error(`Index ${index} does not exist`);
+        throw new AppError(`Index ${index} does not exist`, {code: `INDEX_NOT_FOUND`});
     }
 
     return esConnection.delete({
@@ -36,7 +37,7 @@ async function indexSourceSentenceInElasticsearch(sourceSentence) {
     const language = await LanguageService.getLanguage({id: sourceSentence.languageId});
 
     if (!language) {
-        throw new Error(`Could not find language with id ${sourceSentence.languageId}`);
+        throw new AppError(`Could not find language with id ${sourceSentence.languageId}`, {code: `LANGUAGE_NOT_FOUND`});
     }
 
     const index = `${config.es.sourceSentenceIndexPrefix}${language.englishName}`;
@@ -46,7 +47,7 @@ async function indexSourceSentenceInElasticsearch(sourceSentence) {
     });
 
     if (!indexExists) {
-        throw new Error(`Index ${index} does not exist`);
+        throw new AppError(`Index ${index} does not exist`, {code: `INDEX_NOT_FOUND`});
     }
 
     return esConnection.index({

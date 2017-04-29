@@ -1,5 +1,6 @@
 import assert from 'assert';
 
+import {AppError} from "../utils/app-error";
 import {Translation} from './db-schema';
 
 async function getTranslation(args) {
@@ -36,7 +37,7 @@ async function destroy(id) {
 
     const translation = getTranslation({id: id});
     if (!translation) {
-        throw new Error(`Translation with id ${id} not found`);
+        throw new AppError(`Translation with id ${id} not found`, {code: `TRANSLATION_NOT_FOUND`});
     }
 
     await Translation.destroy({where: {id: id}});
