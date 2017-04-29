@@ -34,16 +34,16 @@ export const User = dbConnection.define('user', {
     timestamps: true,
     paranoid: true,
     hooks: {
-        beforeCreate: (user) => {
+        beforeCreate: async (user) => {
             assert(user);
 
-            user.password = UserService.encryptPassword(user.password);
+            user.password = await UserService.encryptPassword(user.password);
             return user;
         },
-        beforeUpdate: (user) => {
+        beforeUpdate: async (user) => {
             assert(user);
 
-            user.password = UserService.encryptPassword(user.password);
+            user.password = await UserService.encryptPassword(user.password);
             return user;
         }
     }
