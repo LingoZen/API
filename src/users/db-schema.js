@@ -5,11 +5,7 @@ import {dbConnection} from '../../db';
 import {Service as UserService} from './service';
 
 export const User = dbConnection.define('user', {
-    firstName: {
-        type: Sequelize.STRING,
-        allowNull: true
-    },
-    lastName: {
+    name: {
         type: Sequelize.STRING,
         allowNull: true
     },

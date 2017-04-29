@@ -11,10 +11,7 @@ export const mutationFields = {
     createUser: {
         type: User,
         args: {
-            firstName: {
-                type: GraphQLString
-            },
-            lastName: {
+            name: {
                 type: GraphQLString
             },
             email: {
@@ -37,10 +34,7 @@ export const mutationFields = {
             id: {
                 type: new GraphQLNonNull(GraphQLID)
             },
-            firstName: {
-                type: GraphQLString
-            },
-            lastName: {
+            name: {
                 type: GraphQLString
             },
             email: {
@@ -91,10 +85,7 @@ export const mutationFields = {
             password: {
                 type: new GraphQLNonNull(GraphQLString)
             },
-            firstName: {
-                type: GraphQLString
-            },
-            lastName: {
+            name: {
                 type: GraphQLString
             },
             username: {

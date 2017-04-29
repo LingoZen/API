@@ -20,16 +20,10 @@ export const Type = new GraphQLObjectType({
                 return user.id;
             }
         },
-        firstName: {
+        name: {
             type: GraphQLString,
             resolve(user) {
-                return user.firstName;
-            }
-        },
-        lastName: {
-            type: GraphQLString,
-            resolve(user) {
-                return user.lastName;
+                return user.name;
             }
         },
         email: {

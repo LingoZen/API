@@ -1,32 +1,28 @@
 [
   {
     "id": 1,
-    "firstName": "Seeder",
-    "lastName": "McSeedy",
+    "name": "Seeder McSeedy",
     "username": "seedsalot",
     "email": "s@e.ed",
     "password": "password"
   },
   {
     "id": 2,
-    "firstName": "Nick",
-    "lastName": "Freitas",
+    "name": "Nick Freitas",
     "username": "nfreitas",
     "email": "nfreitas@fakeemail.com",
     "password": "password"
   },
   {
     "id": 3,
-    "firstName": "Brandon",
-    "lastName": "Charest",
+    "name": "Brandon Charest",
     "username": "brandon",
     "email": "brandon@notafakeemail.com",
     "password": "password"
   },
   {
     "id": 4,
-    "firstName": "The Legendary We",
-    "lastName": "We",
+    "name": "The Legendary We We",
     "username": "wewe",
     "email": "wewe@notsureiffakeemail.com",
     "password": "wewe"
