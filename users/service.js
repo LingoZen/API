@@ -1,6 +1,8 @@
-import assert from 'assert';
+import assert from "assert";
+import bcrypt from "bcrypt-nodejs";
 
-import {User} from './db-schema';
+import {AppError} from "../utils/app-error";
+import {User} from "./db-schema";
 
 async function getUser(args) {
     assert(args);
@@ -49,7 +51,7 @@ async function login(username, password) {
 
     const user = getUser({username: username});
     if (!user) {
-        throw new Error(`User with username ${username} not found`);
+        throw new AppError(`User with username ${username} not found`, {code: `INCORRECT_PASSWORD`});
     }
 
     // encrypt the password provided by the user
@@ -57,7 +59,7 @@ async function login(username, password) {
 
     // and compare that encrypted password to the encrypted password stored in the database
     if (user.password !== encryptedPassword) {
-        throw new Error(`Password does not match`);
+        throw new AppError(`Password does not match`, {code: `INCORRECT_PASSWORD`});
     }
 }
 

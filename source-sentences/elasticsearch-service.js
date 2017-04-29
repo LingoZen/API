@@ -1,8 +1,8 @@
 import assert from 'assert';
 
 import {Service as LanguageService} from '../languages/service'
-import {config} from '../../config';
-import {esConnection} from '../../es';
+import {config} from '../config';
+import {esConnection} from '../es';
 
 async function destroySourceSentenceInElasticsearch(sourceSentence) {
     assert(sourceSentence);

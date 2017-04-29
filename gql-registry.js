@@ -1,12 +1,14 @@
-import {graphqlHapi, graphiqlHapi} from 'graphql-server-hapi';
+import {graphiqlHapi, graphqlHapi} from "graphql-server-hapi";
+import {formatError} from "apollo-errors";
 
-import {rootSchema} from './gql-root-schema';
+import {rootSchema} from "./gql-root-schema";
 
 const normalEndPoint = {
     register: graphqlHapi,
     options: {
         path: '/api/gql',
         graphqlOptions: {
+            formatError: formatError,
             schema: rootSchema,
         },
         route: {

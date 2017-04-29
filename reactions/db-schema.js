@@ -1,6 +1,6 @@
 import Sequelize from 'sequelize';
 
-import {dbConnection} from '../../db';
+import {dbConnection} from '../db';
 import {User} from '../users/db-schema';
 import {Translation} from '../translations/db-schema';
 import {Comment} from '../comments/db-schema';

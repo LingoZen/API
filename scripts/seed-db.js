@@ -1,11 +1,11 @@
 require('babel-polyfill');
 
-const commentSeed = require('../src/comments/db-seed.json');
-const languageSeed = require('../src/languages/db-seed.json');
-const reactionSeed = require('../src/reactions/db-seed.json');
-const sourceSentenceSeed = require('../src/source-sentences/db-seed.json');
-const translationSeed = require('../src/translations/db-seed.json');
-const userSeed = require('../src/users/db-seed.json');
+const commentSeed = require('../comments/db-seed.json');
+const languageSeed = require('../languages/db-seed.json');
+const reactionSeed = require('../reactions/db-seed.json');
+const sourceSentenceSeed = require('../source-sentences/db-seed.json');
+const translationSeed = require('../translations/db-seed.json');
+const userSeed = require('../users/db-seed.json');
 
 const {User} = require('../dist/users/db-schema');
 const {Language} = require('../dist/languages/db-schema');

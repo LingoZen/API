@@ -1,6 +1,6 @@
 import Sequelize from 'sequelize';
 
-import {dbConnection} from '../../db';
+import {dbConnection} from '../db';
 
 export const Language = dbConnection.define('language', {
     id: {

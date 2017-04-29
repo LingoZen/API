@@ -1,11 +1,8 @@
-import {
-    GraphQLID,
-    GraphQLString,
-    GraphQLNonNull
-} from 'graphql';
+import {GraphQLID, GraphQLNonNull, GraphQLString} from "graphql";
 
-import {Type as User} from './gql-type'
-import {Service as UserService} from './service'
+import {Type as User} from "./gql-type";
+import {Service as UserService} from "./service";
+import {GqlError} from "../gql-error";
 
 export const mutationFields = {
     createUser: {
@@ -72,8 +69,21 @@ export const mutationFields = {
                 type: new GraphQLNonNull(GraphQLString)
             }
         },
-        resolve(_, {username, password}) {
-            return UserService.login(username, password);
+        async resolve (_, {username, password}) {
+            try {
+                await UserService.login(username, password)
+            } catch (e) {
+                console.error(e);
+
+                switch (e.code) {
+                    case 'INCORRECT_PASSWORD':
+                    case 'INCORRECT_USERNAME':
+                        throw new GqlError({data: {code: 'INCORRECT_USERNAME_OR_PASSWORD'}});
+                    default:
+                        throw new GqlError({data: {code: 'INCORRECT_USERNAME_OR_PASSWORD'}});
+                }
+
+            }
         }
     },
     register: {

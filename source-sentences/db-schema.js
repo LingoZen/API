@@ -1,7 +1,7 @@
 import Sequelize from 'sequelize';
 import assert from 'assert';
 
-import {dbConnection} from '../../db';
+import {dbConnection} from '../db';
 import {ElasticsearchService as SourceSentenceElasticsearchService} from './elasticsearch-service'
 import {User} from '../users/db-schema';
 import {Language} from '../languages/db-schema';

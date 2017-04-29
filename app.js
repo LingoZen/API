@@ -1,10 +1,10 @@
 import hapi from 'hapi';
 
-import {config} from '../config';
+import {config} from './config';
 import {gqlRegistry} from './gql-registry';
 
-const {esConnection} = require('../es');
-const {dbConnection} = require('../db');
+const {esConnection} = require('./es');
+const {dbConnection} = require('./db');
 
 export async function main() {
     //create the api server

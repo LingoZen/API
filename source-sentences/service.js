@@ -1,7 +1,7 @@
 import assert from 'assert';
 
-import {config} from '../../config';
-import {esConnection} from '../../es';
+import {config} from '../config';
+import {esConnection} from '../es';
 import {SourceSentence} from './db-schema';
 
 async function getSourceSentence(args) {

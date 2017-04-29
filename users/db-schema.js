@@ -1,7 +1,7 @@
 import Sequelize from 'sequelize';
 import assert from 'assert';
 
-import {dbConnection} from '../../db';
+import {dbConnection} from '../db';
 import {Service as UserService} from './service';
 
 export const User = dbConnection.define('user', {
