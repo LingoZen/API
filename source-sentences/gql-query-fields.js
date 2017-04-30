@@ -1,12 +1,8 @@
-import {
-    GraphQLID,
-    GraphQLNonNull,
-    GraphQLList,
-    GraphQLString
-} from 'graphql';
+import {GraphQLID, GraphQLList, GraphQLNonNull, GraphQLString} from "graphql";
 
-import {Type as SourceSentence} from './gql-type'
-import {Service as SourceSentenceService} from './service'
+import {Type as SourceSentence} from "./gql-type";
+import {Service as SourceSentenceService} from "./service";
+import {Language} from "../languages/db-schema";
 
 export const queryFields = {
     sourceSentence: {
@@ -29,8 +25,11 @@ export const queryFields = {
     searchSourceSentences: {
         type: new GraphQLList(SourceSentence),
         args: {
-            searchQuery: {
-                type: GraphQLString
+            searchString: {
+                type: new GraphQLNonNull(GraphQLString)
+            },
+            languageId: {
+                type: new GraphQLNonNull(GraphQLString)
             }
         },
         resolve(_, args) {

@@ -1,8 +1,8 @@
-import assert from 'assert';
+import assert from "assert";
 
-import {config} from '../config';
-import {esConnection} from '../es';
-import {SourceSentence} from './db-schema';
+import {config} from "../config";
+import {esConnection} from "../es";
+import {SourceSentence} from "./db-schema";
 import {AppError} from "../utils/app-error";
 
 async function getSourceSentence(args) {
@@ -46,21 +46,36 @@ async function destroy(id) {
     return sourceSentence;
 }
 
-async function searchSourceSentences(args) {
-    assert(args);
+async function searchSourceSentences({searchString = "", languageId = "eng"}) {
+    assert(searchString);
+    assert(languageId);
 
-    const searchQuery = args && args.searchQuery;
     const searchBody = {
         _source: false,
         query: {
             match: {
-                text: searchQuery
+                text: searchString
             }
         }
     };
 
+    let index = null;
+    switch (languageId) {
+        case 'eng':
+            index = `${config.es.sourceSentenceIndexPrefix}english`;
+            break;
+        case 'spa':
+            index = `${config.es.sourceSentenceIndexPrefix}spanish`;
+            break;
+        case 'fra':
+            index = `${config.es.sourceSentenceIndexPrefix}french`;
+            break;
+        default:
+            throw new AppError(`Unknown language id ${languageId}`, {code: `NO_INDEX_EXISTS_FOR_LANGUAGE_ID`});
+    }
+
     const results = await esConnection.search({
-        index: `${config.es.sourceSentenceIndexPrefix}*`,
+        index: index,
         body: searchBody
     });
 
