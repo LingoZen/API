@@ -4,6 +4,7 @@ import {dbConnection} from '../db';
 import {User} from '../users/db-schema';
 import {SourceSentence} from '../source-sentences/db-schema';
 import {Translation} from '../translations/db-schema';
+import {Language} from '../languages/db-schema';
 
 export const Comment = dbConnection.define('comment', {
     text: {
@@ -27,3 +28,6 @@ Translation.hasMany(Comment);
 
 Comment.belongsTo(User);
 User.hasMany(Comment);
+
+Comment.belongsTo(Language);
+Language.hasMany(Comment);

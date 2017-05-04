@@ -17,44 +17,44 @@ export const Type = new GraphQLObjectType({
     fields: () => ({
         id: {
             type: GraphQLID,
-            resolve(translation) {
-                return translation.id;
+            resolve(comment) {
+                return comment.id;
             }
         },
         text: {
             type: GraphQLString,
-            resolve(translation) {
-                return translation.text;
+            resolve(comment) {
+                return comment.text;
             }
         },
         user: {
             type: User,
-            resolve(translation) {
-                return translation.getUser();
+            resolve(comment) {
+                return comment.getUser();
             }
         },
         sourceSentence: {
             type: SourceSentence,
-            resolve(translation) {
-                return translation.getSourceSentence();
+            resolve(comment) {
+                return comment.getSourceSentence();
             }
         },
         translation: {
             type: Translation,
-            resolve(translation) {
-                return translation.getTranslation();
+            resolve(comment) {
+                return comment.getTranslation();
             }
         },
         language: {
             type: Language,
-            resolve(translation) {
-                return translation.getLanguage();
+            resolve(comment) {
+                return comment.getLanguage();
             }
         },
         reactions: {
             type: new GraphQLList(Reaction),
-            resolve(reaction) {
-                return reaction.getReactions();
+            resolve(comment) {
+                return comment.getReactions();
             }
         }
     })
