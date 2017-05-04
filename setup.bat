@@ -7,9 +7,9 @@ CALL:installLocalNodePackages
 CALL:buildApi
 CALL:startMySqlServiceIfNotRunning
 CALL:startEsClusterIfNotRunning
+CALL:serveKibana
 CALL:setupEsClusterIndices
 CALL:seedDatabase
-CALL:serveKibana
 
 GOTO:EOF
 
@@ -70,7 +70,7 @@ REM Creates/Updates the elasticsearch indices and mappings
 REM -------------------------------------
 :setupEsClusterIndices
 ECHO Setting up the elasticsearch cluster indices
-CALL node .\scripts\create-es-index.js
+CALL npm run create-es-index
 ECHO Set up the elasticsearch cluster indices
 GOTO:EOF
 
@@ -97,6 +97,6 @@ REM Seed the Database
 REM -------------------------------------
 :seedDatabase
 ECHO Seeding database
-CALL node .\scripts\seed-db.js
+CALL npm run seed-db
 ECHO Seeded database
 GOTO:EOF
