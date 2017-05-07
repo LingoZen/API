@@ -1,14 +1,14 @@
 import {GraphQLID, GraphQLList, GraphQLObjectType, GraphQLString} from "graphql";
 
-import {Type} from "./type";
+
 import {TranslationType} from "./translation";
 import {LanguageType} from "./language";
 import {ReactionType} from "./reaction";
 import {UserType} from "./user";
 import {CommentType} from "./comment";
 
-export class SentenceType extends Type {
-    type = new GraphQLObjectType({
+export class SentenceType {
+    static type = new GraphQLObjectType({
         name: 'SourceSentence',
         description: 'Source Sentence',
         fields: () => ({
@@ -56,8 +56,4 @@ export class SentenceType extends Type {
             }
         })
     });
-
-    constructor() {
-        super();
-    }
 }

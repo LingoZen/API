@@ -5,6 +5,7 @@ export abstract class QueryField {
     protected _queryFields;
 
     constructor() {
+        this.initializeQueryFields();
     }
 
     get fields() {

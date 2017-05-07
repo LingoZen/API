@@ -23,7 +23,7 @@ export class GqlRegistry {
     }
 
     private addNormalEndpoint() {
-        this.endPoints.push({
+        this.endPoints = this.endPoints.push({
             register: graphqlHapi,
             options: {
                 path: '/api/gql',
@@ -39,7 +39,7 @@ export class GqlRegistry {
     }
 
     private addDebugEndpoint() {
-        this.endPoints.push({
+        this.endPoints = this.endPoints.push({
             register: graphiqlHapi,
             options: {
                 path: '/api/giql',

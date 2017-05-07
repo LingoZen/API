@@ -11,7 +11,8 @@ export class LanguageQueryField extends QueryField {
     }
 
     initializeQueryFields() {
-        this._queryFields = {
+        const self = this;
+        self._queryFields = {
             language: {
                 type: LanguageType.type,
                 args: {
@@ -20,13 +21,13 @@ export class LanguageQueryField extends QueryField {
                     }
                 },
                 resolve(_, args) {
-                    return this.languageService.getOne(args);
+                    return self.languageService.getOne(args);
                 }
             },
             languages: {
                 type: new GraphQLList(LanguageType.type),
                 resolve(_, args) {
-                    return this.languageService.getMany(args);
+                    return self.languageService.getMany(args);
                 }
             }
         };

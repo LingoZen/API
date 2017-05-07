@@ -3,16 +3,14 @@ import {List, Map} from "immutable";
 import {injectable} from "inversify";
 
 import {DbSchema} from "./db-schema";
-import {DbConnector} from "../connector";
 import {LanguageDbSchema} from "./language";
 import {UserDbSchema} from "./user";
 
 @injectable()
 export class SentenceDbSchema extends DbSchema {
-    constructor(dbConnector: DbConnector,
-                private userDbSchema: UserDbSchema,
+    constructor(private userDbSchema: UserDbSchema,
                 private languageDbSchema: LanguageDbSchema) {
-        super(dbConnector);
+        super();
         this.initializeSchema();
     }
 

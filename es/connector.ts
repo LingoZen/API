@@ -1,32 +1,22 @@
 import * as elasticsearch from "elasticsearch";
-import {injectable} from "inversify";
 
 import {AppConfig} from "../app-config";
 
-//Todo: consider making this a singleton
-@injectable()
 export class EsConnector {
-    private _connection;
+    private static _connection;
 
-    constructor(private appConfig: AppConfig) {
-        const config = appConfig.config;
+    static get connection() {
+        if (!EsConnector._connection) {
+            EsConnector._connection = EsConnector.createConnection();
+        }
 
-        const esConnectionOptions = {
-            esHost: config.host,
-            esLog: config.logging
-        };
-
-        this._connection = EsConnector.createConnection(esConnectionOptions);
-    }
-
-    get connection() {
         return this._connection;
     }
 
-    private static createConnection({esHost, esLog}) {
+    private static createConnection() {
         return new elasticsearch.Client({
-            host: esHost,
-            log: esLog
+            host: AppConfig.config.es.host,
+            log: AppConfig.config.es.log
         })
     }
 }

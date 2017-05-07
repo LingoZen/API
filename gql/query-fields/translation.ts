@@ -12,7 +12,8 @@ export class TranslationQueryField extends QueryField {
     }
 
     initializeQueryFields() {
-        this._queryFields = {
+        const self = this;
+        self._queryFields = {
             translation: {
                 type: TranslationType.type,
                 args: {
@@ -21,13 +22,13 @@ export class TranslationQueryField extends QueryField {
                     }
                 },
                 resolve(_, args) {
-                    return this.translationService.getOne(args);
+                    return self.translationService.getOne(args);
                 }
             },
             translations: {
                 type: new GraphQLList(TranslationType.type),
                 resolve(_, args) {
-                    return this.translationService.getMany(args);
+                    return self.translationService.getMany(args);
                 }
             }
         };

@@ -17,6 +17,8 @@ import {SentenceQueryField} from "./query-fields/sentence";
 @injectable()
 export class GqlRootSchema {
     schema;
+    private queryFields;
+    private mutationFields;
 
     constructor(private languageMutationField: LanguageMutationField,
                 private userMutationField: UserMutationField,
@@ -34,31 +36,42 @@ export class GqlRootSchema {
     }
 
     private initializeSchema() {
+        this.initializeQueryFields();
+        this.initializeMutationFields();
+
         this.schema = new GraphQLSchema({
             query: new GraphQLObjectType({
                 name: `Query`,
-                fields: Object.assign(
-                    {},
-                    this.languageQueryField.fields,
-                    this.userQueryField.fields,
-                    this.commentQueryField.fields,
-                    this.reactionQueryField.fields,
-                    this.translationQueryField.fields,
-                    this.sentenceQueryField.fields
-                )
+                fields: this.queryFields
             }),
             mutation: new GraphQLObjectType({
                 name: `Mutation`,
-                fields: Object.assign(
-                    {},
-                    this.languageMutationField.fields,
-                    this.userMutationField.fields,
-                    this.commentMutationField.fields,
-                    this.reactionMutationField.fields,
-                    this.translationMutationField.fields,
-                    this.sentenceMutationField.fields
-                )
+                fields: this.mutationFields
             })
         });
+    }
+
+    private initializeQueryFields() {
+        this.queryFields = Object.assign(
+            {},
+            this.languageQueryField.fields,
+            this.userQueryField.fields,
+            this.commentQueryField.fields,
+            this.reactionQueryField.fields,
+            this.translationQueryField.fields,
+            this.sentenceQueryField.fields
+        );
+    }
+
+    private initializeMutationFields() {
+        this.mutationFields = Object.assign(
+            {},
+            this.languageMutationField.fields,
+            this.userMutationField.fields,
+            this.commentMutationField.fields,
+            this.reactionMutationField.fields,
+            this.translationMutationField.fields,
+            this.sentenceMutationField.fields
+        );
     }
 }

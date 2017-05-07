@@ -3,7 +3,6 @@ import {List, Map} from "immutable";
 import {injectable} from "inversify";
 
 import {DbSchema} from "./db-schema";
-import {DbConnector} from "../connector";
 import {CommentDbSchema} from "./comment";
 import {SentenceDbSchema} from "./sentence";
 import {TranslationDbSchema} from "./translation";
@@ -11,12 +10,11 @@ import {UserDbSchema} from "./user";
 
 @injectable()
 export class ReactionDbSchema extends DbSchema {
-    constructor(dbConnector: DbConnector,
-                private sentenceDbSchema: SentenceDbSchema,
+    constructor(private sentenceDbSchema: SentenceDbSchema,
                 private translationDbSchema: TranslationDbSchema,
                 private userDbSchema: UserDbSchema,
                 private commentDbSchema: CommentDbSchema) {
-        super(dbConnector);
+        super();
         this.initializeSchema();
     }
 

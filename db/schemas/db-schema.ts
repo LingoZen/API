@@ -7,7 +7,7 @@ import {DbConnector} from "../connector";
 export abstract class DbSchema {
     public schema;
 
-    constructor(private dbConnector: DbConnector) {
+    constructor() {
     }
 
     protected initializeSchema() {
@@ -31,9 +31,7 @@ export abstract class DbSchema {
         const defaultSchemaOptions = Map({timestamp: true, paranoid: true});
         const schemaOptions = defaultSchemaOptions.merge(this.getAdditionalSchemaOptions());
 
-        this.schema = this.dbConnector.connection.define(this.getSchemaName(), this.getSchemaAttribute().toObject(), schemaOptions.toObject());
-
-        console.log('After define', this.schema);
+        this.schema = DbConnector.connection.define(this.getSchemaName(), this.getSchemaAttribute().toObject(), schemaOptions.toObject());
     }
 
     /**
@@ -41,9 +39,7 @@ export abstract class DbSchema {
      */
     private defineRelationships() {
         const r = this.getRelationships();
-        console.log('r', r);
         r.forEach(dbSchema => {
-            console.log('dbSchema', dbSchema);
             if (!dbSchema.schema) {
                 throw new Error(`dbSchema.schema is undefined or null`);
             }

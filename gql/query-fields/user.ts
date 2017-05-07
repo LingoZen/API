@@ -12,7 +12,8 @@ export class UserQueryField extends QueryField {
     }
 
     initializeQueryFields() {
-        this._queryFields = {
+        const self = this;
+        self._queryFields = {
             user: {
                 type: UserType.type,
                 args: {
@@ -21,13 +22,13 @@ export class UserQueryField extends QueryField {
                     }
                 },
                 resolve(_, args) {
-                    return this.userService.getOne(args);
+                    return self.userService.getOne(args);
                 }
             },
             users: {
                 type: new GraphQLList(UserType.type),
                 resolve(_, args) {
-                    return this.userService.getMany(args);
+                    return self.userService.getMany(args);
                 }
             }
         };

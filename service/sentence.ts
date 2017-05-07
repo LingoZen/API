@@ -11,9 +11,7 @@ import {EsConnector} from "../es/connector";
 @injectable()
 export class SentenceService extends Service {
     constructor(sentenceDbSchema: SentenceDbSchema,
-                private esConnector: EsConnector,
-                private languageService: LanguageService,
-                private appConfig: AppConfig) {
+                private languageService: LanguageService) {
         super(sentenceDbSchema);
     }
 
@@ -42,19 +40,19 @@ export class SentenceService extends Service {
         let index = null;
         switch (languageId) {
             case 'eng':
-                index = `${this.appConfig.config.es.sourceSentenceIndexPrefix}english`;
+                index = `${AppConfig.config.es.sentenceIndexPrefix}english`;
                 break;
             case 'spa':
-                index = `${this.appConfig.config.es.sourceSentenceIndexPrefix}spanish`;
+                index = `${AppConfig.config.es.sentenceIndexPrefix}spanish`;
                 break;
             case 'fra':
-                index = `${this.appConfig.config.es.sourceSentenceIndexPrefix}french`;
+                index = `${AppConfig.config.es.sentenceIndexPrefix}french`;
                 break;
             default:
                 throw new AppError(`Unknown language id ${languageId}`, {code: `NO_INDEX_EXISTS_FOR_LANGUAGE_ID`});
         }
 
-        const results = await this.esConnector.connection.search({
+        const results = await EsConnector.connection.search({
             index: index,
             body: searchBody
         });
@@ -78,9 +76,9 @@ export class SentenceService extends Service {
             throw new AppError(`Could not find language with id ${removedSentence.languageId}`, {code: `LANGUAGE_NOT_FOUND`});
         }
 
-        const index = `${this.appConfig.config.es.sourceSentenceIndexPrefix}${language.englishName}`;
+        const index = `${AppConfig.config.es.sentenceIndexPrefix}${language.englishName}`;
 
-        const indexExists = await this.esConnector.connection.indices.exists({
+        const indexExists = await EsConnector.connection.indices.exists({
             index: index
         });
 
@@ -88,9 +86,9 @@ export class SentenceService extends Service {
             throw new AppError(`Index ${index} does not exist`, {code: `INDEX_NOT_FOUND`});
         }
 
-        return this.esConnector.connection.delete({
+        return EsConnector.connection.delete({
             index: index,
-            type: this.appConfig.config.es.sourceSentenceType,
+            type: AppConfig.config.es.sentenceType,
             id: removedSentence.id
         });
     }
@@ -143,9 +141,9 @@ export class SentenceService extends Service {
             throw new AppError(`Could not find language with id ${sentence.languageId}`, {code: `LANGUAGE_NOT_FOUND`});
         }
 
-        const index = `${this.appConfig.config.es.sentenceIndexPrefix}${language.englishName}`;
+        const index = `${AppConfig.config.es.sentenceIndexPrefix}${language.englishName}`;
 
-        const indexExists = await this.esConnector.connection.indices.exists({
+        const indexExists = await EsConnector.connection.indices.exists({
             index: index
         });
 
@@ -153,9 +151,9 @@ export class SentenceService extends Service {
             throw new AppError(`Index ${index} does not exist`, {code: `INDEX_NOT_FOUND`});
         }
 
-        return this.esConnector.connection.index({
+        return EsConnector.connection.index({
             index: index,
-            type: this.appConfig.config.es.sourceSentenceType,
+            type: AppConfig.config.es.sentenceType,
             id: sentence.id,
             body: {
                 text: sentence.text

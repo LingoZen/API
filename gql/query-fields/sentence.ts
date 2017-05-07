@@ -12,7 +12,8 @@ export class SentenceQueryField extends QueryField {
     }
 
     initializeQueryFields() {
-        this._queryFields = {
+        const self = this;
+        self._queryFields = {
             sourceSentence: {
                 type: SentenceType.type,
                 args: {
@@ -21,13 +22,13 @@ export class SentenceQueryField extends QueryField {
                     }
                 },
                 resolve(_, args) {
-                    return this.sentenceService.getOne(args);
+                    return self.sentenceService.getOne(args);
                 }
             },
             sourceSentences: {
                 type: new GraphQLList(SentenceType.type),
                 resolve(_, args) {
-                    return this.sentenceService.getMany(args);
+                    return self.sentenceService.getMany(args);
                 }
             },
             searchSourceSentences: {
@@ -41,7 +42,7 @@ export class SentenceQueryField extends QueryField {
                     }
                 },
                 resolve(_, args) {
-                    return this.sentenceService.search(args);
+                    return self.sentenceService.search(args);
                 }
             }
         };

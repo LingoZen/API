@@ -11,7 +11,8 @@ export class CommentQueryField extends QueryField {
     }
 
     initializeQueryFields() {
-        this._queryFields = {
+        const self = this;
+        self._queryFields = {
             comment: {
                 type: CommentType.type,
                 args: {
@@ -20,13 +21,13 @@ export class CommentQueryField extends QueryField {
                     }
                 },
                 resolve(_, args) {
-                    return this.commentService.getOne(args);
+                    return self.commentService.getOne(args);
                 }
             },
             comments: {
                 type: new GraphQLList(CommentType.type),
                 resolve(_, args) {
-                    return this.commentService.getMany(args);
+                    return self.commentService.getMany(args);
                 }
             }
         };

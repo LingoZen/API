@@ -12,7 +12,8 @@ export class ReactionQueryField extends QueryField {
     }
 
     initializeQueryFields() {
-        this._queryFields = {
+        const self = this;
+        self._queryFields = {
             reaction: {
                 type: ReactionType.type,
                 args: {
@@ -21,7 +22,7 @@ export class ReactionQueryField extends QueryField {
                     }
                 },
                 resolve(_, args) {
-                    return this.reactionService.getOne(args);
+                    return self.reactionService.getOne(args);
                 }
             },
             reactions: {
@@ -32,7 +33,7 @@ export class ReactionQueryField extends QueryField {
                     }
                 },
                 resolve(_, args) {
-                    return this.reactionService.getMany(args);
+                    return self.reactionService.getMany(args);
                 }
             }
         };

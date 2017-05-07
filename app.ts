@@ -2,24 +2,21 @@ import * as hapi from "hapi";
 
 import {DbConnector} from "./db/connector";
 import {AppConfig} from "./app-config";
-import {EsConnector} from "./es/connector";
 import {GqlRegistry} from "./gql/registry";
+import {EsConnector} from "./es/connector";
 
 export class App {
     private server;
 
-    constructor(private appConfig: AppConfig,
-                private dbConnector: DbConnector,
-                private esConnector: EsConnector,
-                private gqlRegistry: GqlRegistry) {
+    constructor(private gqlRegistry: GqlRegistry) {
         this.server = new hapi.Server();
     }
 
     public async initializeServer() {
         this.setServerConnection();
         await this.setGraphQlRegistry();
-        await this.pingEsConnection();
-        await this.pingDbConnection();
+        await App.pingEsConnection();
+        await App.pingDbConnection();
 
         this.server.start();
 
@@ -29,24 +26,24 @@ export class App {
 
     private setServerConnection() {
         this.server.connection({
-            host: this.appConfig.config.server.host,
-            port: this.appConfig.config.server.portNumber
+            host: AppConfig.config.server.host,
+            port: AppConfig.config.server.portNumber
         });
     }
 
     private async setGraphQlRegistry() {
         const endpointsToRegister = this.gqlRegistry.getEndpoints();
-        await this.server.register(endpointsToRegister);
+        return this.server.register(endpointsToRegister);
     }
 
-    private async pingEsConnection() {
-        return this.esConnector.connection.ping({
+    private static async pingEsConnection() {
+        return EsConnector.connection.ping({
             requestTimeout: Infinity
         });
     }
 
-    private async pingDbConnection() {
-        return this.dbConnector.connection.authenticate();
+    private static async pingDbConnection() {
+        return DbConnector.connection.authenticate();
     }
 
 }

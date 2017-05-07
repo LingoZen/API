@@ -5,6 +5,7 @@ export abstract class MutationField {
     protected _mutationFields;
 
     constructor() {
+        this.initializeMutationFields();
     }
 
     get fields() {
