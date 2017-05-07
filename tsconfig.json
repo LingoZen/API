@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "inlineSources": true,
+    "target": "es6",
+    "noImplicitAny": false,
+    "outDir": "built",
+    "rootDir": ".",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
+  },
+  "exclude": [
+    "node_modules"
+  ]
+}
