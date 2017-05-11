@@ -1,15 +1,16 @@
 import * as assert from "assert";
-import {injectable} from "inversify";
+import {inject, injectable} from "inversify";
 
 import {Service} from "./service";
 import {UserDbSchema} from "../db/schemas/user";
 import {AppError} from "../app-error";
 import {AppEncrypt} from "../app-encrypt";
+import {iocTypes} from "../ioc-types";
 
 @injectable()
 export class UserService extends Service {
-    constructor(userDbSchema: UserDbSchema,
-                private appEncrypt: AppEncrypt) {
+    constructor(@inject(iocTypes.UserDbSchema) userDbSchema: UserDbSchema,
+                @inject(iocTypes.AppEncrypt) private appEncrypt: AppEncrypt) {
         super(userDbSchema);
     }
 

@@ -1,8 +1,8 @@
 import * as assert from "assert";
-import {injectable} from "inversify";
 
 import {DbSchema} from "../db/schemas/db-schema";
 import {AppError} from "../app-error";
+import {injectable} from "inversify";
 
 @injectable()
 export abstract class Service {

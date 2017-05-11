@@ -1,13 +1,14 @@
 import {GraphQLID, GraphQLNonNull, GraphQLString} from "graphql";
-import {injectable} from "inversify";
+import {inject, injectable} from "inversify";
 
 import {MutationField} from "./mutation-field";
 import {SentenceService} from "../../service/sentence";
 import {SentenceType} from "../types/sentence";
+import {iocTypes} from "../../ioc-types";
 
 @injectable()
 export class SentenceMutationField extends MutationField {
-    constructor(private sentenceService: SentenceService) {
+    constructor(@inject(iocTypes.SentenceService) private sentenceService: SentenceService) {
         super();
     }
 

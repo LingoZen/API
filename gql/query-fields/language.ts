@@ -1,12 +1,13 @@
 import {GraphQLID, GraphQLList, GraphQLNonNull} from "graphql";
-import {injectable} from "inversify";
+import {inject, injectable} from "inversify";
 import {LanguageService} from "../../service/language";
 import {QueryField} from "./query-field";
 import {LanguageType} from "../types/language";
+import {iocTypes} from "../../ioc-types";
 
 @injectable()
 export class LanguageQueryField extends QueryField {
-    constructor(private languageService: LanguageService) {
+    constructor(@inject(iocTypes.LanguageService) private languageService: LanguageService) {
         super();
     }
 

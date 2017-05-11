@@ -1,5 +1,5 @@
 import * as assert from "assert";
-import {injectable} from "inversify";
+import {inject, injectable} from "inversify";
 
 import {Service} from "./service";
 import {LanguageService} from "./language";
@@ -7,11 +7,12 @@ import {SentenceDbSchema} from "../db/schemas/sentence";
 import {AppError} from "../app-error";
 import {AppConfig} from "../app-config";
 import {EsConnector} from "../es/connector";
+import {iocTypes} from "../ioc-types";
 
 @injectable()
 export class SentenceService extends Service {
-    constructor(sentenceDbSchema: SentenceDbSchema,
-                private languageService: LanguageService) {
+    constructor(@inject(iocTypes.SentenceDbSchema) sentenceDbSchema: SentenceDbSchema,
+                @inject(iocTypes.LanguageService) private languageService: LanguageService) {
         super(sentenceDbSchema);
     }
 

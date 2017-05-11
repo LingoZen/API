@@ -3,11 +3,12 @@ import {GraphQLID, GraphQLNonNull, GraphQLString} from "graphql";
 import {MutationField} from "./mutation-field";
 import {CommentService} from "../../service/comment";
 import {CommentType} from "../types/comment";
-import {injectable} from "inversify";
+import {inject, injectable} from "inversify";
+import {iocTypes} from "../../ioc-types";
 
 @injectable()
 export class CommentMutationField extends MutationField {
-    constructor(private commentService: CommentService) {
+    constructor(@inject(iocTypes.CommentService) private commentService: CommentService) {
         super();
     }
 

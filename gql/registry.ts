@@ -1,15 +1,16 @@
 import {graphiqlHapi, graphqlHapi} from "graphql-server-hapi";
 import {formatError} from "apollo-errors";
 import {List} from "immutable";
-import {injectable} from "inversify";
+import {inject, injectable} from "inversify";
 
 import {GqlRootSchema} from "./root-schema";
+import {iocTypes} from "../ioc-types";
 
 @injectable()
 export class GqlRegistry {
     private endPoints: List<any>;
 
-    constructor(private rootSchema: GqlRootSchema) {
+    constructor(@inject(iocTypes.GqlRootSchema) private rootSchema: GqlRootSchema) {
         this.endPoints = List();
 
         this.addNormalEndpoint();

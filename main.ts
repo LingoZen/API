@@ -1,12 +1,12 @@
+import {iocContainer, doBinding} from "./inversify.config";
 import {App} from "./app";
-import {iocContainer} from "./inversify.config";
+import {iocTypes} from "./ioc-types";
 import {GqlRegistry} from "./gql/registry";
 
-//get dependencies
-const gqlRegistry = iocContainer.get(GqlRegistry);
+doBinding();
 
 //create instance of app
-const app = new App(gqlRegistry);
+const app = new App(iocContainer.get<GqlRegistry>(iocTypes.GqlRegistry));
 
 //initialize app
 app.initializeServer()

@@ -4,11 +4,13 @@ import {DbConnector} from "./db/connector";
 import {AppConfig} from "./app-config";
 import {GqlRegistry} from "./gql/registry";
 import {EsConnector} from "./es/connector";
+import {iocTypes} from "./ioc-types";
+import {inject} from "inversify";
 
 export class App {
-    private server;
+    server;
 
-    constructor(private gqlRegistry: GqlRegistry) {
+    constructor(@inject(iocTypes.GqlRegistry) private gqlRegistry: GqlRegistry) {
         this.server = new hapi.Server();
     }
 

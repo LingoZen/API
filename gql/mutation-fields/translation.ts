@@ -1,13 +1,14 @@
 import {GraphQLID, GraphQLNonNull, GraphQLString} from "graphql";
-import {injectable} from "inversify";
+import {inject, injectable} from "inversify";
 
 import {MutationField} from "./mutation-field";
 import {TranslationService} from "../../service/translation";
 import {TranslationType} from "../types/translation";
+import {iocTypes} from "../../ioc-types";
 
 @injectable()
 export class TranslationMutationField extends MutationField {
-    constructor(private translationService: TranslationService) {
+    constructor(@inject(iocTypes.TranslationService) private translationService: TranslationService) {
         super();
     }
 

@@ -1,12 +1,13 @@
 import {GraphQLID, GraphQLList, GraphQLNonNull} from "graphql";
-import {injectable} from "inversify";
+import {inject, injectable} from "inversify";
 import {CommentService} from "../../service/comment";
 import {QueryField} from "./query-field";
 import {CommentType} from "../types/comment";
+import {iocTypes} from "../../ioc-types";
 
 @injectable()
 export class CommentQueryField extends QueryField {
-    constructor(private commentService: CommentService) {
+    constructor(@inject(iocTypes.CommentService) private commentService: CommentService) {
         super();
     }
 

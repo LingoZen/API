@@ -1,5 +1,5 @@
 import {GraphQLObjectType, GraphQLSchema} from "graphql";
-import {injectable} from "inversify";
+import {inject, injectable} from "inversify";
 
 import {LanguageMutationField} from "./mutation-fields/language";
 import {UserMutationField} from "./mutation-fields/user";
@@ -13,6 +13,7 @@ import {CommentQueryField} from "./query-fields/comment";
 import {ReactionQueryField} from "./query-fields/reaction";
 import {TranslationQueryField} from "./query-fields/translation";
 import {SentenceQueryField} from "./query-fields/sentence";
+import {iocTypes} from "../ioc-types";
 
 @injectable()
 export class GqlRootSchema {
@@ -20,18 +21,18 @@ export class GqlRootSchema {
     private queryFields;
     private mutationFields;
 
-    constructor(private languageMutationField: LanguageMutationField,
-                private userMutationField: UserMutationField,
-                private commentMutationField: CommentMutationField,
-                private reactionMutationField: ReactionMutationField,
-                private translationMutationField: TranslationMutationField,
-                private sentenceMutationField: SentenceMutationField,
-                private languageQueryField: LanguageQueryField,
-                private userQueryField: UserQueryField,
-                private commentQueryField: CommentQueryField,
-                private reactionQueryField: ReactionQueryField,
-                private translationQueryField: TranslationQueryField,
-                private sentenceQueryField: SentenceQueryField) {
+    constructor(@inject(iocTypes.LanguageMutationField) private languageMutationField: LanguageMutationField,
+                @inject(iocTypes.UserMutationField) private userMutationField: UserMutationField,
+                @inject(iocTypes.CommentMutationField) private commentMutationField: CommentMutationField,
+                @inject(iocTypes.ReactionMutationField) private reactionMutationField: ReactionMutationField,
+                @inject(iocTypes.TranslationMutationField) private translationMutationField: TranslationMutationField,
+                @inject(iocTypes.SentenceMutationField) private sentenceMutationField: SentenceMutationField,
+                @inject(iocTypes.LanguageQueryField) private languageQueryField: LanguageQueryField,
+                @inject(iocTypes.UserQueryField) private userQueryField: UserQueryField,
+                @inject(iocTypes.CommentQueryField) private commentQueryField: CommentQueryField,
+                @inject(iocTypes.ReactionQueryField) private reactionQueryField: ReactionQueryField,
+                @inject(iocTypes.TranslationQueryField) private translationQueryField: TranslationQueryField,
+                @inject(iocTypes.SentenceQueryField) private sentenceQueryField: SentenceQueryField) {
         this.initializeSchema();
     }
 

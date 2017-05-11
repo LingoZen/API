@@ -29,52 +29,46 @@ import {TranslationQueryField} from "./gql/query-fields/translation";
 import {UserQueryField} from "./gql/query-fields/user";
 import {GqlRegistry} from "./gql/registry";
 import {GqlRootSchema} from "./gql/root-schema";
-import {MutationField} from "./gql/mutation-fields/mutation-field";
-import {QueryField} from "./gql/query-fields/query-field";
-import {Service} from "./service/service";
-import {DbSchema} from "./db/schemas/db-schema";
+import {iocTypes} from "./ioc-types";
 
 export const iocContainer = new Container();
-
-// services
-iocContainer.bind<Service>(Service).toSelf();
-iocContainer.bind<CommentService>(CommentService).toSelf();
-iocContainer.bind<LanguageService>(LanguageService).toSelf();
-iocContainer.bind<ReactionService>(ReactionService).toSelf();
-iocContainer.bind<SentenceService>(SentenceService).toSelf();
-iocContainer.bind<TranslationService>(TranslationService).toSelf();
-iocContainer.bind<UserService>(UserService).toSelf();
+export function doBinding() {
+    // services
+    iocContainer.bind<CommentService>(iocTypes.CommentService).to(CommentService)
+    iocContainer.bind<LanguageService>(iocTypes.LanguageService).to(LanguageService)
+    iocContainer.bind<ReactionService>(iocTypes.ReactionService).to(ReactionService)
+    iocContainer.bind<SentenceService>(iocTypes.SentenceService).to(SentenceService)
+    iocContainer.bind<TranslationService>(iocTypes.TranslationService).to(TranslationService)
+    iocContainer.bind<UserService>(iocTypes.UserService).to(UserService)
 
 // db schemas
-iocContainer.bind<DbSchema>(DbSchema).toSelf();
-iocContainer.bind<CommentDbSchema>(CommentDbSchema).toSelf();
-iocContainer.bind<LanguageDbSchema>(LanguageDbSchema).toSelf();
-iocContainer.bind<ReactionDbSchema>(ReactionDbSchema).toSelf();
-iocContainer.bind<SentenceDbSchema>(SentenceDbSchema).toSelf();
-iocContainer.bind<TranslationDbSchema>(TranslationDbSchema).toSelf();
-iocContainer.bind<UserDbSchema>(UserDbSchema).toSelf();
+    iocContainer.bind<CommentDbSchema>(iocTypes.CommentDbSchema).to(CommentDbSchema)
+    iocContainer.bind<LanguageDbSchema>(iocTypes.LanguageDbSchema).to(LanguageDbSchema)
+    iocContainer.bind<ReactionDbSchema>(iocTypes.ReactionDbSchema).to(ReactionDbSchema)
+    iocContainer.bind<SentenceDbSchema>(iocTypes.SentenceDbSchema).to(SentenceDbSchema)
+    iocContainer.bind<TranslationDbSchema>(iocTypes.TranslationDbSchema).to(TranslationDbSchema)
+    iocContainer.bind<UserDbSchema>(iocTypes.UserDbSchema).to(UserDbSchema)
 
 // gql mutation fields
-iocContainer.bind<MutationField>(MutationField).toSelf();
-iocContainer.bind<CommentMutationField>(CommentMutationField).toSelf();
-iocContainer.bind<LanguageMutationField>(LanguageMutationField).toSelf();
-iocContainer.bind<ReactionMutationField>(ReactionMutationField).toSelf();
-iocContainer.bind<SentenceMutationField>(SentenceMutationField).toSelf();
-iocContainer.bind<TranslationMutationField>(TranslationMutationField).toSelf();
-iocContainer.bind<UserMutationField>(UserMutationField).toSelf();
+    iocContainer.bind<CommentMutationField>(iocTypes.CommentMutationField).to(CommentMutationField)
+    iocContainer.bind<LanguageMutationField>(iocTypes.LanguageMutationField).to(LanguageMutationField)
+    iocContainer.bind<ReactionMutationField>(iocTypes.ReactionMutationField).to(ReactionMutationField)
+    iocContainer.bind<SentenceMutationField>(iocTypes.SentenceMutationField).to(SentenceMutationField)
+    iocContainer.bind<TranslationMutationField>(iocTypes.TranslationMutationField).to(TranslationMutationField)
+    iocContainer.bind<UserMutationField>(iocTypes.UserMutationField).to(UserMutationField)
 
 // gql query fields
-iocContainer.bind<QueryField>(QueryField).toSelf();
-iocContainer.bind<CommentQueryField>(CommentQueryField).toSelf();
-iocContainer.bind<LanguageQueryField>(LanguageQueryField).toSelf();
-iocContainer.bind<ReactionQueryField>(ReactionQueryField).toSelf();
-iocContainer.bind<SentenceQueryField>(SentenceQueryField).toSelf();
-iocContainer.bind<TranslationQueryField>(TranslationQueryField).toSelf();
-iocContainer.bind<UserQueryField>(UserQueryField).toSelf();
+    iocContainer.bind<CommentQueryField>(iocTypes.CommentQueryField).to(CommentQueryField)
+    iocContainer.bind<LanguageQueryField>(iocTypes.LanguageQueryField).to(LanguageQueryField)
+    iocContainer.bind<ReactionQueryField>(iocTypes.ReactionQueryField).to(ReactionQueryField)
+    iocContainer.bind<SentenceQueryField>(iocTypes.SentenceQueryField).to(SentenceQueryField)
+    iocContainer.bind<TranslationQueryField>(iocTypes.TranslationQueryField).to(TranslationQueryField)
+    iocContainer.bind<UserQueryField>(iocTypes.UserQueryField).to(UserQueryField)
 
 // gql classes
-iocContainer.bind<GqlRegistry>(GqlRegistry).toSelf();
-iocContainer.bind<GqlRootSchema>(GqlRootSchema).toSelf();
+    iocContainer.bind<GqlRegistry>(iocTypes.GqlRegistry).to(GqlRegistry)
+    iocContainer.bind<GqlRootSchema>(iocTypes.GqlRootSchema).to(GqlRootSchema)
 
 // app classes
-iocContainer.bind<AppEncrypt>(AppEncrypt).toSelf();
+    iocContainer.bind<AppEncrypt>(iocTypes.AppEncrypt).to(AppEncrypt)
+}

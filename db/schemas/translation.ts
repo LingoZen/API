@@ -1,17 +1,18 @@
 import Sequelize from "sequelize";
 import {List, Map} from "immutable";
-import {injectable} from "inversify";
+import {inject, injectable} from "inversify";
 
 import {DbSchema} from "./db-schema";
 import {UserDbSchema} from "./user";
 import {SentenceDbSchema} from "./sentence";
 import {LanguageDbSchema} from "./language";
+import {iocTypes} from "../../ioc-types";
 
 @injectable()
 export class TranslationDbSchema extends DbSchema {
-    constructor(private userDbSchema: UserDbSchema,
-                private sentenceDbSchema: SentenceDbSchema,
-                private languageDbSchema: LanguageDbSchema) {
+    constructor(@inject(iocTypes.UserDbSchema) private userDbSchema: UserDbSchema,
+                @inject(iocTypes.SentenceDbSchema) private sentenceDbSchema: SentenceDbSchema,
+                @inject(iocTypes.LanguageDbSchema) private languageDbSchema: LanguageDbSchema) {
         super();
         this.initializeSchema();
     }

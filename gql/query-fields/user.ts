@@ -1,13 +1,14 @@
 import {GraphQLID, GraphQLList, GraphQLNonNull} from "graphql";
-import {injectable} from "inversify";
+import {inject, injectable} from "inversify";
 
 import {QueryField} from "./query-field";
 import {UserService} from "../../service/user";
 import {UserType} from "../types/user";
+import {iocTypes} from "../../ioc-types";
 
 @injectable()
 export class UserQueryField extends QueryField {
-    constructor(private userService: UserService) {
+    constructor(@inject(iocTypes.UserService) private userService: UserService) {
         super();
     }
 

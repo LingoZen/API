@@ -1,0 +1,19 @@
+{
+  "files": [
+    {
+      "pattern": "src/**/*.ts",
+      "load": false
+    }
+  ],
+  "tests": [
+    {
+      "pattern": "src/**/*.spec.ts",
+      "load": false
+    },
+    {
+      "pattern": "test/**/*.ts",
+      "load": false
+    }
+  ],
+  "testFramework": "mocha"
+}

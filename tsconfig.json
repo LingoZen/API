@@ -1,14 +1,18 @@
 {
+  "compileOnSave": true,
   "compilerOptions": {
     "inlineSources": true,
-    "target": "es6",
+    "target": "es5",
     "noImplicitAny": false,
-    "outDir": "built",
     "rootDir": ".",
     "module": "commonjs",
     "moduleResolution": "node",
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    "emitDecoratorMetadata": true,
+    "lib": [
+      "ES2015",
+      "es6"
+    ]
   },
   "exclude": [
     "node_modules"

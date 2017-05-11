@@ -1,7 +1,7 @@
 import {List, Map} from "immutable";
-import {injectable} from "inversify";
 
 import {DbConnector} from "../connector";
+import {injectable} from "inversify";
 
 @injectable()
 export abstract class DbSchema {
